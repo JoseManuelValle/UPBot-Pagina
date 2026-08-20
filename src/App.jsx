@@ -1,123 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const projectData = [
+  { slug: 'rescue', name: 'Rescue', competition: 'TMR', people: '8 integrantes', stage: 'Investigación y prototipado', image: '/images/rescue.webp', description: 'Proyecto enfocado en desarrollar un robot para desplazarse en terrenos abruptos y participar en escenarios simulados de rescate.', detail: 'Hasta contar con la ficha técnica final, aquí se incorporarán objetivos, capacidades, etapas y galería del proyecto.' },
+  { slug: 'mini-sumo', name: 'Mini-Sumo', competition: 'RoboMatrix', people: '4 integrantes', stage: 'Ensamble de nueva versión', image: '/images/mini-sumo.webp', description: 'Nueva plataforma con PCB y chasis rediseñados para continuar el desarrollo del robot.', detail: 'Aquí se incorporarán los detalles de electrónica, mecánica, control y próximos pasos.' },
+  { slug: 'sumo', name: 'Sumo', competition: 'RoboMatrix', people: '3 integrantes', stage: 'Diseño', image: '/images/sumo.webp', description: 'Proyecto en etapa inicial de diseño e investigación para construir una nueva plataforma.', detail: 'Aquí se incorporarán la plataforma, componentes, decisiones de diseño y documentación.' },
+  { slug: 'sigue-lineas', name: 'Sigue-Líneas', competition: 'RoboMatrix', people: '5 integrantes', stage: 'Armado y programación', image: '/images/siguelineas.webp', description: 'Robot con PCB fabricada y una primera versión del código de control en proceso de pruebas.', detail: 'Aquí se incorporarán las especificaciones, pruebas y evolución del sistema de control.' },
+]
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          
-          <h1>Get started UPBot</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+const competitions = ['RoboMatrix', 'TMR', 'RoboRAVE', 'RoboSTEM']
+const placeholderSections = {
+  '/equipo': { eyebrow: '05 / EQUIPO', title: 'Detrás de cada robot hay un equipo.', intro: '[TEAM INTRO PLACEHOLDER]', image: '/images/team.webp', kind: 'team' },
+  '/competencias': { eyebrow: '06 / COMPETENCIAS', title: 'Ponemos nuestros robots a prueba.', intro: '[COMPETITIONS INTRO PLACEHOLDER]', image: '/images/competition-01.webp', kind: 'competitions' },
+  '/nosotros': { eyebrow: '07 / NOSOTROS', title: 'Una organización universitaria que aprende haciendo.', intro: '[ABOUT INTRO PLACEHOLDER]', image: '/images/team-working-01.webp', kind: 'history' },
 }
+
+function Logo() { return <span className="logo-lockup" aria-label="UPBot logo placeholder">UP<span>Bot</span><b title="Reemplazar con logo oficial">O</b></span> }
+
+function ImageSlot({ src, label, alt = '', className = '' }) {
+  const [failed, setFailed] = useState(false)
+  return <figure className={`image-slot ${className}`}><img src={src} alt={alt || label} loading="lazy" onError={() => setFailed(true)} />{failed && <div className="image-placeholder"><span>IMG / SLOT</span><strong>[{label}]</strong><small>{src}</small></div>}<figcaption>{label}</figcaption></figure>
+}
+
+function Button({ children, href, secondary = false }) { return <a className={`button ${secondary ? 'button-secondary' : 'button-primary'}`} href={href}>{children}<span aria-hidden="true">↗</span></a> }
+
+function Navbar() {
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => { const onScroll = () => setScrolled(window.scrollY > 24); window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll) }, [])
+  const links = [['/proyectos', 'Proyectos'], ['/equipo', 'Equipo'], ['/competencias', 'Competencias'], ['/nosotros', 'Nosotros']]
+  return <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}><nav className="nav shell" aria-label="Navegación principal"><a href="/" onClick={() => setOpen(false)}><Logo /></a><button className="menu-toggle" type="button" aria-expanded={open} aria-controls="main-menu" onClick={() => setOpen(!open)}><span></span><span></span><span></span><b>Menú</b></button><div id="main-menu" className={`nav-menu ${open ? 'is-open' : ''}`}>{links.map(([href, label]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}<a className="nav-collab" href="/colabora" onClick={() => setOpen(false)}>Colabora</a></div><a className="nav-join" href="/unete" onClick={() => setOpen(false)}>Únete a UPBot <span>↗</span></a></nav></header>
+}
+
+function Footer() { return <footer className="footer"><div className="shell footer-grid"><div><Logo /><p>[FOOTER DESCRIPTION PLACEHOLDER]</p></div><div><small>NAVEGAR</small><a href="/proyectos">Proyectos</a><a href="/equipo">Equipo</a><a href="/competencias">Competencias</a><a href="/nosotros">Nosotros</a></div><div><small>PARTICIPA</small><a href="/unete">Únete</a><a href="/colabora">Colabora</a><a href="mailto:upbot@up.edu.mx">upbot@up.edu.mx</a><a href="https://www.instagram.com/upbot_gdl/" target="_blank" rel="noreferrer">Instagram ↗</a></div></div><div className="shell footer-bottom"><span>Universidad Panamericana · Campus Guadalajara</span><span>[SOCIAL LINKS PLACEHOLDER]</span></div></footer> }
+
+function PlaceholderBand({ image, label, children, reverse = false }) {
+  const ref = useRef(null)
+  useEffect(() => { const onScroll = () => { if (!ref.current) return; const distance = ref.current.getBoundingClientRect().top - window.innerHeight / 2; ref.current.style.setProperty('--drift', `${Math.max(-12, Math.min(12, distance * -0.025))}px`) }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); return () => window.removeEventListener('scroll', onScroll) }, [])
+  return <article ref={ref} className={`editorial-row ${reverse ? 'reverse' : ''}`}><ImageSlot src={image} label={label} className="editorial-image" /><div className="editorial-copy"><span className="kicker">[PROCESS / PLACEHOLDER]</span><h3>{children}</h3><p>[SHORT DESCRIPTION PLACEHOLDER]</p></div></article>
+}
+function SectionIntro({ number, title, text, link }) { return <div className="section-intro"><span className="kicker">{number}</span><div><h2>{title}</h2><p>{text}</p>{link && <a className="arrow-link" href={link}>Explorar sección <span>↗</span></a>}</div></div> }
+
+function Home() { return <><Navbar /><main><section className="hero shell"><div className="hero-copy"><span className="kicker">UPBOT / EQUIPO UNIVERSITARIO DE ROBÓTICA</span><h1>[HERO HEADLINE<br /><em>PLACEHOLDER</em>]</h1><p>[HERO SUBTITLE PLACEHOLDER]</p><div className="hero-actions"><Button href="/proyectos">Conoce nuestros proyectos</Button><Button href="/unete" secondary>Únete a UPBot</Button></div></div><ImageSlot src="/images/hero-robot.webp" label="HERO ROBOT IMAGE" className="hero-image" /></section><section className="proof-strip"><div className="shell proof-grid"><div><strong>24</strong><span>estudiantes<br />[CONFIRMAR DATO]</span></div><div><strong>04</strong><span>proyectos<br />[CONFIRMAR DATO]</span></div><div><strong>2020</strong><span>inicio del proyecto<br />[CONFIRMAR DATO]</span></div><div><strong>→</strong><span>ingeniería aplicada<br />a experiencias reales</span></div></div></section><section className="projects-preview shell"><SectionIntro number="01 / PROYECTOS" title="Nuestros proyectos" text="[PROJECTS INTRO PLACEHOLDER]" link="/proyectos" /><div className="project-mosaic">{projectData.map((project, index) => <a className={`project-tile tile-${index + 1}`} href={`/proyectos/${project.slug}`} key={project.slug}><ImageSlot src={project.image} label={`${project.name.toUpperCase()} IMAGE`} className="tile-image" /><div className="tile-info"><span>{project.competition}</span><h3>{project.name}</h3><p>{project.description}</p><b>Ver proyecto ↗</b></div></a>)}</div></section><section className="process-section"><div className="shell"><SectionIntro number="02 / CÓMO TRABAJAMOS" title="Del concepto a la competencia." text="[PROCESS INTRO PLACEHOLDER]" /><div className="editorial-stack"><PlaceholderBand image="/images/manufacturing-01.webp" label="DESIGN IMAGE">Diseñamos.</PlaceholderBand><PlaceholderBand image="/images/team-working-01.webp" label="BUILD IMAGE" reverse>Construimos.</PlaceholderBand><PlaceholderBand image="/images/team-working-02.webp" label="PROGRAM IMAGE">Programamos.</PlaceholderBand><PlaceholderBand image="/images/competition-01.webp" label="COMPETITION IMAGE" reverse>Competimos.</PlaceholderBand></div></div></section><section className="dark-feature"><div className="shell dark-feature-grid"><div><span className="kicker">03 / COMPETENCIAS</span><h2>Ponemos nuestros<br /><em>robots a prueba.</em></h2><p>[COMPETITIONS INTRO PLACEHOLDER]</p><Button href="/competencias" secondary>Explorar competencias</Button></div><div className="competition-list">{competitions.map((name, index) => <a href="/competencias" key={name}><span>0{index + 1}</span><strong>{name}</strong><b>↗</b></a>)}</div></div></section><section className="team-preview shell"><SectionIntro number="04 / EL EQUIPO" title="Detrás de cada robot hay un equipo." text="[TEAM INTRO PLACEHOLDER]" link="/equipo" /><ImageSlot src="/images/team.webp" label="TEAM IMAGE" className="wide-image" /></section><section className="join-cta"><div className="shell join-grid"><ImageSlot src="/images/team-working-02.webp" label="TEAM WORKING IMAGE" /><div><span className="kicker">08 / ÚNETE A UPBOT</span><h2>¿Quieres construir<br /><em>algo real?</em></h2><p>[JOIN INTRO PLACEHOLDER]</p><Button href="/unete">Únete a UPBot</Button></div></div></section><section className="collab-preview shell"><SectionIntro number="09 / COLABORA" title="[COLLABORATION HEADLINE]" text="[COLLABORATION INTRO PLACEHOLDER]" link="/colabora" /></section></main><Footer /></> }
+
+function ProjectsPage() { return <><Navbar /><main className="inner-page shell"><SectionIntro number="01 / PROYECTOS" title="Proyectos en desarrollo." text="[PROJECTS PAGE INTRO PLACEHOLDER]" /><div className="project-list">{projectData.map((project) => <a className="project-row" href={`/proyectos/${project.slug}`} key={project.slug}><ImageSlot src={project.image} label={`${project.name.toUpperCase()} IMAGE`} /><div><span>{project.competition}</span><h3>{project.name}</h3><p>{project.description}</p></div><b>Ver proyecto ↗</b></a>)}</div></main><Footer /></> }
+function ProjectPage({ project }) { return <><Navbar /><main className="inner-page project-detail shell"><a className="back-link" href="/proyectos">← Todos los proyectos</a><div className="detail-header"><div><span className="kicker">PROYECTO / {project.competition}</span><h1>{project.name}</h1><p>{project.description}</p></div><ImageSlot src={project.image} label={`${project.name.toUpperCase()} IMAGE`} /></div><div className="detail-facts"><span>ETAPA <strong>{project.stage}</strong></span><span>INTEGRANTES <strong>{project.people}</strong></span><span>FICHA <strong>[DATOS POR AGREGAR]</strong></span></div><section className="detail-copy"><span className="kicker">[PROJECT DETAILS]</span><h2>La información de este proyecto crecerá aquí.</h2><p>{project.detail}</p></section></main><Footer /></> }
+function TeamStructure() { return <section className="team-structure"><span className="kicker">[TEAM STRUCTURE]</span><h2>Estructura del equipo.</h2><div className="team-tree"><strong>[LÍDER DEL EQUIPO]</strong><div className="tree-branch">{['[LÍDER RESCUE]', '[LÍDER SUMO]', '[LÍDER MINI-SUMO]', '[LÍDER SIGUE-LÍNEAS]'].map((name) => <span key={name}>{name}</span>)}</div></div><a className="arrow-link" href="/unete">Conoce al equipo <span>↗</span></a></section> }
+function CompetitionModule() { return <section className="competition-module"><span className="kicker">[COMPETITIONS]</span><div>{competitions.map((name, index) => <article key={name}><span>0{index + 1}</span><h3>{name}</h3><p>[DATE / EVENT DETAILS PLACEHOLDER]</p></article>)}</div></section> }
+function HistoryTimeline() { return <section className="history-timeline"><span className="kicker">[HISTORY]</span><h2>Una historia por contar.</h2>{['[YEAR]', '[YEAR]', '[YEAR]', '[YEAR]'].map((year, index) => <article key={`${year}-${index}`}><span>{year}</span><div><h3>[EVENT TITLE PLACEHOLDER]</h3><p>[EVENT DESCRIPTION PLACEHOLDER]</p></div></article>)}</section> }
+function InfoPage({ content }) { return <><Navbar /><main className="inner-page info-page shell"><SectionIntro number={content.eyebrow} title={content.title} text={content.intro} /><ImageSlot src={content.image} label={content.image.split('/').pop().replace('.webp', '').toUpperCase()} className="wide-image" />{content.kind === 'team' && <TeamStructure />}{content.kind === 'competitions' && <CompetitionModule />}{content.kind === 'history' && <HistoryTimeline />}<section className="placeholder-panel"><span className="kicker">[CONTENT MODULE]</span><h2>Información por agregar.</h2><p>[PLACEHOLDER FOR REAL CONTENT, PHOTOGRAPHS, NAMES, DATES AND LINKS]</p><Button href="/unete">Continuar</Button></section></main><Footer /></> }
+function JoinPage({ collaboration = false }) { const title = collaboration ? '[COLLABORATION HEADLINE]' : '¿Quieres construir algo real?'; const eyebrow = collaboration ? '09 / COLABORA' : '08 / ÚNETE A UPBOT'; return <><Navbar /><main className="inner-page join-page shell"><SectionIntro number={eyebrow} title={title} text={collaboration ? '[COLLABORATION INTRO PLACEHOLDER]' : '[JOIN INTRO PLACEHOLDER]'} /><div className="join-modules">{(collaboration ? ['Patrocinio', 'Componentes', 'Materiales', 'Manufactura', 'Servicios', 'Vinculación'] : ['Quién puede entrar', 'Qué conocimientos necesitas', 'Qué aprenderás', 'Áreas del equipo', 'Cómo trabajamos', 'Proceso de entrada']).map((item, index) => <article key={item}><span>0{index + 1}</span><h3>{item}</h3><p>[PLACEHOLDER]</p></article>)}</div><section className="contact-panel"><h2>{collaboration ? 'Colabora con nosotros.' : 'Tu siguiente proyecto puede empezar aquí.'}</h2><p>[CONTACT OR APPLICATION PLACEHOLDER]</p><Button href="mailto:upbot@up.edu.mx">{collaboration ? 'Colabora con nosotros' : 'Contactar a UPBot'}</Button></section></main><Footer /></> }
+
+function App() { const path = window.location.pathname.replace(/\/$/, '') || '/'; useEffect(() => { window.scrollTo(0, 0) }, [path]); if (path === '/') return <Home />; if (path === '/proyectos') return <ProjectsPage />; if (path.startsWith('/proyectos/')) { const project = projectData.find((item) => `/proyectos/${item.slug}` === path); return project ? <ProjectPage project={project} /> : <ProjectsPage /> }; if (path === '/unete') return <JoinPage />; if (path === '/colabora') return <JoinPage collaboration />; return <InfoPage content={placeholderSections[path] || placeholderSections['/nosotros']} /> }
 
 export default App
