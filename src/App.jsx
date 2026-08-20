@@ -44,7 +44,8 @@ const processImages = {
 function PlaceholderBand({ images, label, children, reverse = false, direction = 1, speed = 1 }) {
   const ref = useRef(null)
   useEffect(() => { const onScroll = () => { if (!ref.current) return; const distance = ref.current.getBoundingClientRect().top - window.innerHeight / 2; ref.current.style.setProperty('--drift', `${Math.max(-34, Math.min(34, distance * -0.08 * speed)) * direction}px`) }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); return () => window.removeEventListener('scroll', onScroll) }, [direction, speed])
-  return <article ref={ref} className={`editorial-row ${reverse ? 'reverse' : ''}`}><div className="editorial-copy"><span className="kicker">[PROCESS / PLACEHOLDER]</span><h3>{children}</h3><p>[SHORT DESCRIPTION PLACEHOLDER]</p></div><div className="process-gallery" aria-label={`${label} gallery`}>{images.map((image, index) => <ImageSlot src={image} label={`${label} ${String(index + 1).padStart(2, '0')}`} className="process-image" key={image} />)}</div></article>
+  const galleryImages = [...images, ...images]
+  return <article ref={ref} className={`editorial-row ${reverse ? 'reverse' : ''}`}><div className="editorial-copy"><span className="kicker">[PROCESS / PLACEHOLDER]</span><h3>{children}</h3><p>[SHORT DESCRIPTION PLACEHOLDER]</p></div><div className="process-gallery" aria-label={`${label} gallery`}>{galleryImages.map((image, index) => <ImageSlot src={image} label={`${label} ${String((index % images.length) + 1).padStart(2, '0')}`} className="process-image" key={`${image}-${index}`} />)}</div></article>
 }
 function SectionIntro({ number, title, text, link }) { return <div className="section-intro"><span className="kicker">{number}</span><div><h2>{title}</h2><p>{text}</p>{link && <a className="arrow-link" href={link}>Explorar sección <span>↗</span></a>}</div></div> }
 
