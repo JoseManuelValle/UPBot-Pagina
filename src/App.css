@@ -115,6 +115,484 @@ body {
   }
 }
 
+/* =========================================================
+   PROJECT MOSAIC - ASYMMETRIC MASONRY
+   Four independent cards with different proportions.
+   Adjust these values to tune the desktop composition.
+   ========================================================= */
+:root {
+  --masonry-large: 485px;
+  --masonry-medium: 349px;
+  --masonry-short: 200px;
+  --masonry-tall: 350px;
+  --masonry-gap: 16px;
+}
+
+@media (min-width: 761px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: minmax(0, var(--masonry-large)) minmax(0, var(--masonry-medium)) !important;
+    grid-template-rows: var(--masonry-tall) 119px var(--masonry-short) !important;
+    grid-template-areas:
+      "tile-one tile-three"
+      "tile-one tile-two"
+      "tile-four tile-two" !important;
+    gap: var(--masonry-gap);
+    width: min(100%, calc(var(--masonry-large) + var(--masonry-medium) + var(--masonry-gap)));
+    height: calc(var(--masonry-large) + var(--masonry-tall) + var(--masonry-short) + (var(--masonry-gap) * 2));
+    margin-inline: auto;
+  }
+
+  .projects-preview .project-tile,
+  .projects-preview .tile-1,
+  .projects-preview .tile-2,
+  .projects-preview .tile-3,
+  .projects-preview .tile-4 {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    width: auto;
+    height: 100%;
+    min-height: 0 !important;
+    margin: 0;
+  }
+
+  .projects-preview .tile-1 { grid-area: tile-one !important; }
+  .projects-preview .tile-3 { grid-area: tile-three !important; }
+  .projects-preview .tile-4 { grid-area: tile-four !important; }
+  .projects-preview .tile-2 {
+    grid-area: tile-two !important;
+    height: var(--masonry-tall);
+    align-self: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "tile-one"
+      "tile-three"
+      "tile-four"
+      "tile-two" !important;
+    width: 100%;
+    height: auto;
+    gap: 10px;
+  }
+}
+
+/* =========================================================
+   PROJECT TABLE - FINAL CLEAN GRID
+   Four cards. No absolute positioning. No artificial gaps.
+   ========================================================= */
+.projects-preview .project-table {
+  --table-gap: 16px;
+  display: grid !important;
+  grid-template-columns: minmax(0, 485px) minmax(0, 349px) !important;
+  grid-template-rows: 350px 135px 200px !important;
+  grid-template-areas:
+    "one three"
+    "one two"
+    "four two" !important;
+  gap: var(--table-gap);
+  width: min(100%, 850px) !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+}
+
+.projects-preview .project-table .project-tile {
+  position: relative !important;
+  inset: auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100%;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+.projects-preview .project-table .tile-1 {
+  grid-area: one !important;
+  height: 485px;
+  align-self: start;
+}
+
+.projects-preview .project-table .tile-3 {
+  grid-area: three !important;
+  height: 350px;
+}
+
+.projects-preview .project-table .tile-4 {
+  grid-area: four !important;
+  height: 200px;
+}
+
+.projects-preview .project-table .tile-2 {
+  grid-area: two !important;
+  height: 350px;
+  align-self: start;
+}
+
+.projects-preview .project-table .tile-image,
+.projects-preview .project-table .tile-info {
+  min-width: 0;
+  height: 100%;
+}
+
+@media (max-width: 900px) and (min-width: 761px) {
+  .projects-preview .project-table {
+    grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.92fr) !important;
+    grid-template-rows: 42vw 16vw 24vw !important;
+  }
+
+  .projects-preview .project-table .tile-1 {
+    height: calc(58vw + var(--table-gap));
+  }
+
+  .projects-preview .project-table .tile-3 {
+    height: 42vw;
+  }
+
+  .projects-preview .project-table .tile-4 {
+    height: 24vw;
+  }
+
+  .projects-preview .project-table .tile-2 {
+    height: calc(40vw + var(--table-gap));
+  }
+}
+
+@media (max-width: 760px) {
+  .projects-preview .project-table {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "one"
+      "three"
+      "four"
+      "two" !important;
+    width: 100% !important;
+    height: auto !important;
+    gap: 10px;
+  }
+
+  .projects-preview .project-table .project-tile,
+  .projects-preview .project-table .tile-1,
+  .projects-preview .project-table .tile-2,
+  .projects-preview .project-table .tile-3,
+  .projects-preview .project-table .tile-4 {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    height: 310px !important;
+    min-height: 0 !important;
+  }
+}
+
+/* =========================================================
+   PROCESS GALLERY - CONTINUOUS CSS MARQUEE
+   The gallery remains the viewport; the inner track loops one
+   complete image group, so the reset is visually invisible.
+   ========================================================= */
+.process-gallery {
+  display: block !important;
+  position: relative;
+  width: 100% !important;
+  margin-left: 0 !important;
+  overflow: hidden !important;
+  transform: translate3d(var(--drift, 0px), 0, 0) !important;
+}
+
+.process-gallery-track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  gap: 0;
+  will-change: transform;
+}
+
+.process-gallery-group {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding-right: 12px;
+}
+
+.process-gallery .process-image {
+  flex: 0 0 clamp(260px, 22vw, 360px);
+  width: clamp(260px, 22vw, 360px);
+  height: 285px;
+}
+
+.editorial-row:not(.reverse) .process-gallery-track {
+  animation: process-marquee-left var(--marquee-duration, 30s) linear infinite;
+}
+
+.editorial-row.reverse .process-gallery-track {
+  animation: process-marquee-right var(--marquee-duration, 30s) linear infinite;
+}
+
+.process-gallery:hover .process-gallery-track {
+  animation-play-state: paused;
+}
+
+@keyframes process-marquee-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes process-marquee-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@media (max-width: 760px) {
+  .process-gallery .process-image {
+    flex-basis: 68vw;
+    width: 68vw;
+    height: 235px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-gallery-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   PROJECT TABLE - CLEAN REBUILD
+   This class is intentionally isolated from the old mosaic rules.
+   The four cards are independent and use the supplied proportions.
+   ========================================================= */
+.project-table {
+  --table-width: min(850px, 100%);
+  position: relative !important;
+  display: block !important;
+  width: var(--table-width) !important;
+  height: auto !important;
+  aspect-ratio: 850 / 716;
+  margin-inline: auto !important;
+  overflow: visible !important;
+}
+
+.project-table .project-tile {
+  position: absolute !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0;
+  margin: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.project-table .tile-1 {
+  inset: 0 auto auto 0;
+  width: 57.06%;
+  height: 67.74%;
+}
+
+.project-table .tile-3 {
+  inset: 0 0 auto auto;
+  width: 41.06%;
+  height: 48.88%;
+}
+
+.project-table .tile-4 {
+  inset: 69.97% auto auto 0;
+  width: 57.06%;
+  height: 27.93%;
+}
+
+.project-table .tile-2 {
+  inset: 51.12% 0 auto auto;
+  width: 41.06%;
+  height: 48.88%;
+}
+
+.project-table .tile-image,
+.project-table .tile-info {
+  min-width: 0;
+  height: 100%;
+}
+
+@media (max-width: 760px) {
+  .project-table {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    width: 100% !important;
+    height: auto !important;
+    gap: 10px;
+  }
+
+  .project-table .project-tile,
+  .project-table .tile-1,
+  .project-table .tile-2,
+  .project-table .tile-3,
+  .project-table .tile-4 {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    height: 310px !important;
+  }
+}
+
+/* =========================================================
+   PROJECT MOSAIC - FOUR INDEPENDENT CELLS
+   No card spans multiple rows or columns.
+   The table is asymmetric through its column/row proportions.
+   ========================================================= */
+@media (min-width: 761px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: 1.28fr 0.92fr !important;
+    grid-template-rows: 1.08fr 0.92fr !important;
+    grid-template-areas:
+      "tile-one tile-three"
+      "tile-four tile-two" !important;
+    gap: 12px;
+    height: 620px;
+  }
+
+  .projects-preview .project-tile,
+  .projects-preview .tile-1,
+  .projects-preview .tile-2,
+  .projects-preview .tile-3,
+  .projects-preview .tile-4 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+    height: 100%;
+    min-height: 0 !important;
+    margin: 0;
+  }
+
+  .projects-preview .tile-1 { grid-area: tile-one !important; }
+  .projects-preview .tile-3 { grid-area: tile-three !important; }
+  .projects-preview .tile-4 { grid-area: tile-four !important; }
+  .projects-preview .tile-2 { grid-area: tile-two !important; }
+}
+
+@media (max-width: 760px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "tile-one"
+      "tile-three"
+      "tile-four"
+      "tile-two" !important;
+    height: auto;
+    gap: 10px;
+  }
+
+  .projects-preview .project-tile,
+  .projects-preview .tile-1,
+  .projects-preview .tile-2,
+  .projects-preview .tile-3,
+  .projects-preview .tile-4 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+    height: 100%;
+    min-height: 0 !important;
+    margin: 0;
+  }
+}
+
+/* =========================================================
+   PROJECT MOSAIC - ASYMMETRIC TABLE
+   tile-1: large square
+   tile-3: medium vertical rectangle, upper right
+   tile-4: small horizontal rectangle, below tile-1
+   tile-2: medium vertical rectangle, below tile-3
+   ========================================================= */
+@media (min-width: 761px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-rows: 260px 260px 150px 150px !important;
+    grid-template-areas:
+      "tile-one tile-one tile-three"
+      "tile-one tile-one tile-three"
+      "tile-four tile-four tile-two"
+      "tile-four tile-four tile-two" !important;
+    gap: 12px;
+    height: auto;
+  }
+
+  .projects-preview .project-tile,
+  .projects-preview .tile-1,
+  .projects-preview .tile-2,
+  .projects-preview .tile-3,
+  .projects-preview .tile-4 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+    height: 100%;
+    min-height: 0 !important;
+    margin: 0;
+  }
+
+  .projects-preview .tile-1 {
+    grid-area: tile-one !important;
+  }
+
+  .projects-preview .tile-3 {
+    grid-area: tile-three !important;
+  }
+
+  .projects-preview .tile-4 {
+    grid-area: tile-four !important;
+  }
+
+  .projects-preview .tile-2 {
+    grid-area: tile-two !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "tile-one"
+      "tile-three"
+      "tile-four"
+      "tile-two" !important;
+    gap: 10px;
+    height: auto;
+  }
+
+  .projects-preview .project-tile,
+  .projects-preview .tile-1,
+  .projects-preview .tile-2,
+  .projects-preview .tile-3,
+  .projects-preview .tile-4 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+    height: 100%;
+    min-height: 0 !important;
+    margin: 0;
+  }
+}
+
 /* Explicit placement prevents older grid-row rules from overriding the ratio. */
 @media (min-width: 761px) {
   .projects-preview .tile-1 {
@@ -1332,5 +1810,219 @@ main {
     min-height: 0 !important;
     height: 100%;
     margin: 0;
+  }
+}
+
+/* FINAL PROJECT MOSAIC: four independent, asymmetric cells. */
+@media (min-width: 761px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: 1.28fr 0.92fr !important;
+    grid-template-rows: 1.08fr 0.92fr !important;
+    grid-template-areas:
+      "tile-one tile-three"
+      "tile-four tile-two" !important;
+    gap: 12px;
+    height: 620px;
+  }
+
+  .projects-preview .project-tile {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 0 !important;
+    height: 100%;
+    margin: 0;
+  }
+
+  .projects-preview .tile-1 { grid-area: tile-one !important; }
+  .projects-preview .tile-3 { grid-area: tile-three !important; }
+  .projects-preview .tile-4 { grid-area: tile-four !important; }
+  .projects-preview .tile-2 { grid-area: tile-two !important; }
+}
+
+@media (max-width: 760px) {
+  .projects-preview .project-mosaic {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "tile-one"
+      "tile-three"
+      "tile-four"
+      "tile-two" !important;
+    height: auto;
+  }
+
+  .projects-preview .project-tile {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 0 !important;
+    height: 100%;
+    margin: 0;
+  }
+}
+
+/* FINAL OVERRIDE: the project table uses one real grid and four cells. */
+@media (min-width: 901px) {
+  .projects-preview .project-table {
+    display: grid !important;
+    grid-template-columns: minmax(0, 57.06fr) minmax(0, 41.06fr) !important;
+    grid-template-rows: 432px 147px 247px !important;
+    grid-template-areas:
+      "one three"
+      "one two"
+      "four two" !important;
+    gap: 16px !important;
+    width: min(100%, 1050px) !important;
+    height: 884px !important;
+    margin-inline: auto !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  .projects-preview .project-table .project-tile {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .projects-preview .project-table .tile-1 {
+    grid-area: one !important;
+    height: 599px !important;
+    align-self: start;
+  }
+
+  .projects-preview .project-table .tile-3 {
+    grid-area: three !important;
+    height: 432px !important;
+  }
+
+  .projects-preview .project-table .tile-4 {
+    grid-area: four !important;
+    height: 269px !important;
+  }
+
+  .projects-preview .project-table .tile-2 {
+    grid-area: two !important;
+    height: 432px !important;
+    align-self: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .projects-preview .project-table {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 310px) !important;
+    grid-template-areas:
+      "one"
+      "three"
+      "four"
+      "two" !important;
+    gap: 10px !important;
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+  }
+
+  .projects-preview .project-table .project-tile {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    height: 310px !important;
+    margin: 0 !important;
+  }
+}
+
+/* =========================================================
+   PROCESS GALLERY - FULL BLEED MARQUEE
+   Only the image strip reaches the viewport edges.
+   The editorial copy keeps its existing container.
+   ========================================================= */
+.editorial-row .process-gallery {
+  width: 100vw !important;
+  max-width: none !important;
+  margin-right: 0 !important;
+  margin-left: calc(50% - 50vw) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.editorial-row .process-gallery-track,
+.editorial-row .process-gallery-group {
+  padding: 0 !important;
+  margin: 0;
+}
+
+.editorial-row .process-image {
+  margin: 0 !important;
+  overflow: hidden;
+  transition: none;
+}
+
+/* Keep the marquee moving while hovering; zoom only the image. */
+.process-gallery:hover .process-gallery-track {
+  animation-play-state: running !important;
+}
+
+.process-gallery-track {
+  animation-delay: 0s !important;
+}
+
+/* The gap belongs between repeated groups, never at the viewport edges. */
+.process-gallery .process-gallery-group {
+  padding-right: 0 !important;
+  margin-right: 12px !important;
+}
+
+.process-gallery .process-gallery-group:last-child {
+  margin-right: 12px !important;
+}
+
+.process-gallery .process-image img {
+  transform: scale(1);
+  transition: transform 350ms ease;
+  transform-origin: center;
+}
+
+.process-gallery .process-image:hover img {
+  transform: scale(1.08);
+}
+
+/* The marquee owns horizontal movement; rows and galleries stay fixed on scroll. */
+.editorial-row,
+.process-gallery,
+.editorial-image {
+  transform: none !important;
+  transition: none;
+}
+
+.process-gallery-track {
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 760px) {
+  .editorial-row .process-gallery {
+    width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+  }
+
+  .process-gallery .process-image:hover img {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-gallery .process-image img,
+  .process-gallery .process-image:hover img {
+    transform: none;
+    transition: none;
   }
 }
