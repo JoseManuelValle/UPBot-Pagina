@@ -94,12 +94,12 @@ function demoLogo(text) {
 }
 
 const sponsorPool = [
-  { name: 'Universidad Panamericana', logo: '/images/UP.png', url: '#' },
-  { name: 'Facultad de Ingeniería', logo: demoLogo('Facultad de Ingeniería'), url: '#' },
+  { name: 'Universidad Panamericana', logo: '/images/Logo UP.svg', url: '#' },
+  { name: 'Facultad de Ingeniería', logo: '/images/Facultad Ing.svg', url: '#' },
   { name: 'IMEP', logo: demoLogo('IMEP'), url: '#' },
-  { name: 'Mexbit', logo: demoLogo('Mexbit'), url: '#' },
-  { name: 'Ingusa', logo: demoLogo('Ingusa'), url: '#' },
-  { name: 'Altium', logo: demoLogo('Altium'), url: '#' },
+  { name: 'Mexbit', logo: '/images/Mexbit.svg', url: '#'},
+  { name: 'Ingusa', logo: '/images/logo-ingusa.svg', url: '#'},
+  { name: 'Altium', logo: '/images/logo-altium.svg', url: '#'},
 ]
 
 const painPoints = [
