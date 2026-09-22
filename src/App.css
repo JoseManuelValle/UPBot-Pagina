@@ -2067,6 +2067,11 @@ h2.dark-h2 {
   font: 400 clamp(64px, 9vw, 126px)/0.9 Space Grotesk, serif;
 }
 
+.detail-header h1 .typewriter-title-caret {
+  border-right-width: 0.04em;
+  height: 0.72em;
+}
+
 .detail-header p {
   max-width: 430px;
   color: var(--muted);

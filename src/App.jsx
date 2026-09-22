@@ -283,9 +283,9 @@ const processImages = {
    COMPONENTES BASE
    ========================================================= */
 
-import logoWhite from "./assets/UPBotFullPirataWhite.svg";
-import logoBlack from "./assets/UPBotFullPirataBlack.svg";
-import icono from "./assets/UPBotPirata.svg"; 
+import logoWhite from "./assets/UPBotWhite.svg";
+import logoBlack from "./assets/UPBotBlack.svg";
+import icono from "./assets/icono.svg"; 
 
 function LogoWhite() {
   return (
@@ -1112,7 +1112,9 @@ function ProjectPage({ project }) {
         <div className="detail-header">
           <div>
             <span className="kicker">PROYECTO / {project.competition}</span>
-            <h1>{project.name}</h1>
+            <h1>
+              <TypewriterTitle text={project.name} />
+            </h1>
             <p>{project.description}</p>
           </div>
           <ImageSlot
