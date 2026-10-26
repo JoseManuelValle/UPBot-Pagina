@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import UPBotLogo from './UPBotLogo.jsx'
 
 /* =========================================================
    DATOS
@@ -269,12 +270,38 @@ const processImages = {
   ],
 }
 
+const processSteps = [
+  {
+    title: 'Diseñamos',
+    text: 'Convertimos ideas en piezas, circuitos y planos con CAD, simulación y mucha prueba y error.',
+  },
+  {
+    title: 'Construimos',
+    text: 'Fabricamos y ensamblamos chasis, PCBs y mecanismos. Aquí la teoría se vuelve algo que puedes tocar.',
+  },
+  {
+    title: 'Programamos',
+    text: 'Escribimos el código que le da vida al robot: sensores, control y estrategia, probados una y otra vez.',
+  },
+  {
+    title: 'Competimos',
+    text: 'Llevamos cada robot a competencias reales y regresamos con lo aprendido para la siguiente versión.',
+  },
+]
+
+// Una sola tira con todas las fotos, intercalando las etapas
+const processGallery = processImages.design.flatMap((_, i) => [
+  processImages.design[i],
+  processImages.build[i],
+  processImages.program[i],
+  processImages.competition[i],
+])
+
 /* =========================================================
    COMPONENTES BASE
    ========================================================= */
 
 import logoWhite from "./assets/UPBotWhite.svg";
-import logoBlack from "./assets/UPBotBlack.svg";
 import icono from "./assets/icono.svg"; 
 
 function LogoWhite() {
@@ -283,26 +310,6 @@ function LogoWhite() {
       src={logoWhite}
       alt="UPBot"
       className="logo-lockup"
-    />
-  );
-}
-
-function LogoBlack() {
-  return (
-    <img
-      src={logoBlack}
-      alt="UPBot"
-      className="logo-lockup"
-    />
-  );
-}
-
-function Icono() {
-  return (
-    <img
-      src={icono}
-      alt="UPBot"
-      className="icono-lockup"
     />
   );
 }
@@ -392,32 +399,21 @@ const TYPE_SPEED = 0.06 // segundos por letra
 const TYPE_GAP = 0.35 // pausa entre la línea 1 y la línea 2
 const CARET_BLINK = 0.75 // duración de cada parpadeo del cursor
 
-/* TypewriterHeading recibe "start":
-   · start=false → las líneas quedan ocultas (su base CSS ya es
-     max-width: 0) y SIN animación. Así el tecleo NO corre por
-     detrás del intro de Home.
-   · start=true  → se aplican las animaciones inline y el efecto
-     corre desde cero en ese preciso momento.
-   El "start" lo alimenta App con "introDone" (= !showIntro). */
-function TypewriterHeading({ start = true }) {
+function TypewriterHeading() {
   const line1Duration = HERO_LINE_1.length * TYPE_SPEED
   const line2Delay = line1Duration + TYPE_GAP
   const line2Duration = HERO_LINE_2.length * TYPE_SPEED
   const line1BlinkTimes = Math.max(1, Math.round(line2Delay / CARET_BLINK))
 
-  const line1Style = start
-    ? {
-        '--reveal-width': `${HERO_LINE_1.length * 1.2}ch`,
-        animation: `type-reveal ${line1Duration}s steps(${HERO_LINE_1.length}, end) forwards, type-caret ${CARET_BLINK}s step-end ${line1BlinkTimes}`,
-      }
-    : undefined
+  const line1Style = {
+    '--reveal-width': `${HERO_LINE_1.length * 1.2}ch`,
+    animation: `type-reveal ${line1Duration}s steps(${HERO_LINE_1.length}, end) forwards, type-caret ${CARET_BLINK}s step-end ${line1BlinkTimes}`,
+  }
 
-  const line2Style = start
-    ? {
-        '--reveal-width': `${HERO_LINE_2.length * 1.2}ch`,
-        animation: `type-reveal ${line2Duration}s steps(${HERO_LINE_2.length}, end) ${line2Delay}s forwards, type-caret ${CARET_BLINK}s step-end ${line2Delay}s infinite`,
-      }
-    : undefined
+  const line2Style = {
+    '--reveal-width': `${HERO_LINE_2.length * 1.2}ch`,
+    animation: `type-reveal ${line2Duration}s steps(${HERO_LINE_2.length}, end) ${line2Delay}s forwards, type-caret ${CARET_BLINK}s step-end ${line2Delay}s infinite`,
+  }
 
   return (
     <h1 className="typewriter-heading">
@@ -432,80 +428,16 @@ function TypewriterHeading({ start = true }) {
   )
 }
 
-const TITLE_TYPE_SPEED = 0.045 // segundos por letra
-const TITLE_TYPE_DELAY = 0.35 // pausa tras entrar en pantalla
-
-function TypewriterTitle({ text }) {
-  const [started, setStarted] = useState(false)
-  const [count, setCount] = useState(0)
-  const holderRef = useRef(null)
-  const done = count >= text.length
-
-  // Dispara la animación UNA sola vez, al entrar en pantalla
-  useEffect(() => {
-    const el = holderRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStarted(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.4 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  // Teclea letra a letra
-  useEffect(() => {
-    if (!started) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCount(text.length)
-      return
-    }
-    let interval = null
-    const timeout = setTimeout(() => {
-      interval = setInterval(() => {
-        setCount((c) => {
-          if (c >= text.length) {
-            clearInterval(interval)
-            return c
-          }
-          return c + 1
-        })
-      }, TITLE_TYPE_SPEED * 1000)
-    }, TITLE_TYPE_DELAY * 1000)
-    return () => {
-      clearTimeout(timeout)
-      if (interval) clearInterval(interval)
-    }
-  }, [started, text])
-
-  return (
-    <span className="typewriter-title" ref={holderRef}>
-      <span className="typewriter-title-ghost" aria-hidden="true">{text}</span>
-      <span className="typewriter-title-live" aria-hidden="true">
-        {text.slice(0, count)}
-        <span className={`typewriter-title-caret ${done ? 'is-done' : ''}`} />
-      </span>
-      <span className="sr-only">{text}</span>
-    </span>
-  )
-}
-
+/* Títulos de sección: suben y aparecen al entrar en pantalla */
 function RevealHeading({ children }) {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
   const ref = useRef(null)
 
   useEffect(() => {
     const el = ref.current
-    if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setVisible(true)
-      return
-    }
+    if (!el || visible) return
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -517,7 +449,7 @@ function RevealHeading({ children }) {
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [visible])
 
   return (
     <span className={`reveal-heading ${visible ? 'is-visible' : ''}`} ref={ref}>
@@ -565,7 +497,7 @@ function SectionIntro({ number, title, text, link }) {
       <span className="kicker">{number}</span>
       <div>
         <h2>
-          <TypewriterTitle text={title} />
+          <RevealHeading>{title}</RevealHeading>
         </h2>
         <p>{text}</p>
         {link && (
@@ -602,8 +534,8 @@ function Navbar() {
   return (
     <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
       <nav className="nav shell" aria-label="Navegación principal">
-        <a href="/" onClick={() => setOpen(false)}>
-          <LogoBlack />
+        <a href="/" className="nav-logo" onClick={() => setOpen(false)}>
+          <UPBotLogo />
         </a>
 
         <button
@@ -726,40 +658,28 @@ function Footer() {
    COMPONENTES DE SECCIÓN
    ========================================================= */
 
-function PlaceholderBand({ images, label, text, children, reverse = false, speed = 1 }) {
+function ProcessGallery({ images, speed = 1 }) {
   return (
-    <article className={`editorial-row ${reverse ? 'reverse' : ''}`}>
-      <div className="editorial-copy">
-        <span className="kicker">Nuestro método</span>
-        <h3>{children}</h3>
-        <p>{text}</p>
+    <div
+      className="process-gallery"
+      aria-label="Galería del proceso"
+      style={{ '--marquee-duration': `${60 / speed}s` }}
+    >
+      <div className="process-gallery-track">
+        {[images, images].map((group, groupIndex) => (
+          <div className="process-gallery-group" key={`process-group-${groupIndex}`}>
+            {group.map((image, index) => (
+              <ImageSlot
+                src={image.src}
+                label={image.caption}
+                className="process-image"
+                key={`${image.src}-${groupIndex}-${index}`}
+              />
+            ))}
+          </div>
+        ))}
       </div>
-
-      <div
-        className="process-gallery"
-        aria-label={`Galería: ${label}`}
-        style={{ '--marquee-duration': `${30 / speed}s` }}
-      >
-        <div className="process-gallery-track">
-          {[images, images].map((group, groupIndex) => (
-            <div
-              className="process-gallery-group"
-              key={`${label}-group-${groupIndex}`}
-            >
-              {group.map((image, index) => (
-                <ImageSlot
-                  src={image.src}
-                  label={image.caption}
-                  className="process-image"
-                  loading="eager"
-                  key={`${image.src}-${groupIndex}-${index}`}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </article>
+    </div>
   )
 }
 
@@ -767,10 +687,7 @@ function PlaceholderBand({ images, label, text, children, reverse = false, speed
    PÁGINA: HOME
    ========================================================= */
 
-/* introDone lo inyecta App (= !showIntro): mientras corre el
-   intro, el tecleo del hero permanece pausado y oculto; arranca
-   desde cero en cuanto el intro termina. */
-function Home({ introDone = true }) {
+function Home() {
   return (
     <>
       <Navbar />
@@ -780,7 +697,7 @@ function Home({ introDone = true }) {
         <section className="hero shell">
           <div className="hero-copy">
             <span className="kicker">UPBOT / EQUIPO UNIVERSITARIO DE ROBÓTICA</span>
-            <TypewriterHeading start={introDone} />
+            <TypewriterHeading />
             <p>
               UPbot es un equipo multidisciplinario de robótica donde
               estudiantes convierten teoría en proyectos reales,
@@ -908,43 +825,18 @@ function Home({ introDone = true }) {
               text="Cada robot pasa por el mismo ciclo: lo diseñamos, lo construimos, lo programamos y lo llevamos a competir. Después volvemos a empezar con lo aprendido."
             />
 
-            <div className="editorial-stack">
-              <PlaceholderBand
-                images={processImages.design}
-                label="Diseño"
-                speed={0.8}
-                text="Diseñamos y desarrollamos proyectos. Convertimos ideas en soluciones reales a través de ingeniería, creatividad y experimentación práctica."
-              >
-                Diseñamos.
-              </PlaceholderBand>
-              <PlaceholderBand
-                images={processImages.build}
-                label="Construcción"
-                reverse
-                speed={1.15}
-                text="Fabricamos y ensamblamos cada pieza: chasis, PCBs y mecanismos. Aquí la teoría se convierte en algo que puedes tocar."
-              >
-                Construimos.
-              </PlaceholderBand>
-              <PlaceholderBand
-                images={processImages.program}
-                label="Programación"
-                speed={0.65}
-                text="Escribimos el código que le da vida al robot: sensores, control y estrategia, probados una y otra vez hasta que funcionan."
-              >
-                Programamos.
-              </PlaceholderBand>
-              <PlaceholderBand
-                images={processImages.competition}
-                label="Competencia"
-                reverse
-                speed={1.3}
-                text="Probamos, competimos y aprendemos. Aplicamos nuestros conocimientos en competencias y experiencias reales donde cada desafío forma parte del aprendizaje."
-              >
-                Competimos.
-              </PlaceholderBand>
-            </div>
+            <ol className="process-steps">
+              {processSteps.map((step, index) => (
+                <li className="process-step" key={step.title}>
+                  <span>0{index + 1}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </li>
+              ))}
+            </ol>
           </div>
+
+          <ProcessGallery images={processGallery} />
         </section>
 
         {/* ---------- COMPETENCIAS ---------- */}
@@ -953,7 +845,7 @@ function Home({ introDone = true }) {
             <div>
               <span className="kicker">03 / COMPETENCIAS</span>
               <h2>
-                <TypewriterTitle text="Ponemos nuestros robots a prueba." />
+                <RevealHeading>Ponemos nuestros robots a prueba.</RevealHeading>
               </h2>
               <p>
                 Participar en competencias y eventos de innovación aplicando
@@ -1021,7 +913,7 @@ function Home({ introDone = true }) {
             <div>
               <span className="kicker">06 / ÚNETE A UPBOT</span>
               <h2 className="dark-h2">
-                <TypewriterTitle text="¿Quieres construir algo real?" />
+                <RevealHeading>¿Quieres construir algo real?</RevealHeading>
               </h2>
               <p>No guardes tu potencial, constrúyelo.</p>
               <Button href="/unete">Únete a UPBot</Button>
@@ -1106,7 +998,7 @@ function ProjectPage({ project }) {
           <div>
             <span className="kicker">PROYECTO / {project.competition}</span>
             <h1>
-              <TypewriterTitle text={project.name} />
+              <RevealHeading>{project.name}</RevealHeading>
             </h1>
             <p>{project.description}</p>
           </div>
@@ -1772,216 +1664,12 @@ function JoinPage({ collaboration = false }) {
    ========================================================= */
 
 /* =========================================================
-   INTRO LOADER (UNA ejecución por visita: la primera vez que
-   el usuario llega a Home durante esa visita)
+   APP — NAVEGACIÓN SPA
    ------------------------------------------------------------
-   Secuencia completa:
-
-     1 · Las fotos se van apilando una encima de otra (ninguna
-        desaparece: la pila queda siempre visible).
-     2 · Sobre la pila entra el póster azul con el logo blanco
-         completo centrado (LogoWhite) y el video arrancando
-         desde 0s en ese preciso momento.
-     3 · El póster crece hasta llenar la pantalla y, mientras
-         tanto, el logo se reduce (zoom out) y el icono toma su
-         lugar en el centro.
-     4 · El icono se queda visible (respirando muy sutil) y
-         todo hace fade para revelar el Home.
-
-   Cuándo corre lo decide <App/> (ver la sección APP abajo): se
-   monta la primera vez que el usuario llega a Home con el
-   loading aún pendiente y, como la bandera de "ya ejecutado"
-   se marca al dispararse, no vuelve a montarse hasta que
-   exista una nueva carga completa de la web (F5 / pestaña
-   nueva / nueva visita).
-   ========================================================= */
-
-const INTRO_FRAME_MS = 130 // ritmo con el que cae cada foto sobre la pila
-const INTRO_STACK_TAIL_MS = 260 // pausa tras apilar la última foto
-const INTRO_LOGO_HOLD_MS = 600 // cuánto se ve el logo completo antes de reducirse
-const INTRO_GROW_MS = 700 // crecimiento del póster a pantalla completa
-const INTRO_ICON_LEAD_MS = 420 // el logo empieza a reducirse antes de que termine el crecimiento
-const INTRO_ICON_MS = 700 // duración de la transición logo → icono
-const INTRO_ICON_HOLD_MS = 500 // cuánto se queda solo el icono en pantalla
-const INTRO_FADE_MS = 500 // fade final del loader hacia el Home
-
-// Para apilar TUS propias imágenes (o tu logo): importa los
-// archivos arriba (con los demás imports, ej.
-// import miFoto from './assets/mi-foto.webp') y reemplaza las
-// rutas de esta lista.
-const introImages = [
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/68052f16d090290d350e8c89_img%201.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/6805301b88f0cd575978a25a_image%202.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/680531728d47b543c1e20397_3.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/68053265d0576dff0d7bafc5_3.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/6806c45ecbb081bb1386a6a7_111.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/68067948d71e49256cad0502_6.avif',
-  'https://cdn.prod.website-files.com/656759acf6013e1492415a32/691cf1c1c6bf3285a915a543_Slide%2080-p-1600.png',
-]
-
-// Inclinación de cada foto: se calcula sola según cuántas haya
-const introRotations = introImages.map((_, i) => -35 + i * 5)
-
-const INTRO_VIDEO = 'https://hellorobosite.s3.us-east-2.amazonaws.com/Main+2.webm'
-
-function IntroLoader({ onDone }) {
-  const [phase, setPhase] = useState('stack')
-  const [visibleCount, setVisibleCount] = useState(0)
-  const onDoneRef = useRef(onDone)
-  const videoRef = useRef(null)
-
-  // onDone llega como función inline desde <App/>, así que se
-  // guarda en un ref para que el effect de abajo NO se reinicie
-  // cada vez que App vuelva a renderizar.
-  useEffect(() => {
-    onDoneRef.current = onDone
-  }, [onDone])
-
-  // El video se monta junto con el loader (así va precargando
-  // mientras caen las fotos) pero NO se reproduce solo: se
-  // reinicia a 0s y arranca justo cuando el póster entra
-  // en escena (fase 'logo').
-  useEffect(() => {
-    if (phase !== 'logo') return
-    const video = videoRef.current
-    if (!video) return
-    try {
-      video.currentTime = 0
-    } catch {
-      // aún sin metadata: el navegador encola el salto igual
-    }
-    video.play().catch(() => {})
-  }, [phase])
-
-  useEffect(() => {
-    // Con movimiento reducido no se anima nada: se entrega el
-    // Home directamente (el CSS además oculta el loader).
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const t = setTimeout(() => onDoneRef.current(), 300)
-      return () => clearTimeout(t)
-    }
-
-    const timers = []
-
-    // 1 · apilar las fotos una por una (todas se quedan)
-    introImages.forEach((_, i) => {
-      timers.push(setTimeout(() => setVisibleCount(i + 1), i * INTRO_FRAME_MS))
-    })
-
-    // 2 · póster con el logo completo
-    const tLogo = introImages.length * INTRO_FRAME_MS + INTRO_STACK_TAIL_MS
-    // 3 · el póster crece…
-    const tGrow = tLogo + INTRO_LOGO_HOLD_MS
-    //    …y el logo empieza a reducirse un poco antes de que termine
-    const tIcon = tGrow + INTRO_ICON_LEAD_MS
-    // 4 · fade final
-    const tLeave = tIcon + INTRO_ICON_MS + INTRO_ICON_HOLD_MS
-    const tDone = tLeave + INTRO_FADE_MS + 120
-
-    timers.push(setTimeout(() => setPhase('logo'), tLogo))
-    timers.push(setTimeout(() => setPhase('grow'), tGrow))
-    timers.push(setTimeout(() => setPhase('icon'), tIcon))
-    timers.push(setTimeout(() => setPhase('leave'), tLeave))
-    timers.push(setTimeout(() => setPhase('done'), tDone))
-    timers.push(setTimeout(() => onDoneRef.current(), tDone + 40))
-
-    return () => timers.forEach((t) => clearTimeout(t))
-  }, [])
-
-  if (phase === 'done') return null
-
-  const posterClass = [
-    'intro-poster',
-    phase !== 'stack' ? 'is-in' : '',
-    phase === 'grow' || phase === 'icon' || phase === 'leave' ? 'is-full' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  const brandClass = [
-    'intro-brand',
-    phase === 'logo' || phase === 'grow' ? 'is-logo' : '',
-    phase === 'icon' || phase === 'leave' ? 'is-icon' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  return (
-    <div
-      className={`intro-loader ${phase === 'leave' ? 'is-leaving' : ''}`}
-      aria-hidden="true"
-    >
-      {/* 1 · Pila de fotos: cada una cae ENCIMA de la anterior
-          y ninguna se quita — la imagen de atrás nunca desaparece */}
-      <div className="intro-stack">
-        {introImages.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt=""
-            className={`intro-photo ${i < visibleCount ? 'is-in' : ''}`}
-            style={{ '--tilt': `${introRotations[i]}deg` }}
-          />
-        ))}
-      </div>
-
-      {/* 2/3 · Póster: entra como tarjeta sobre la pila, crece a
-          pantalla completa y dentro vive la transición
-          logo completo → icono (reutiliza <LogoWhite/> y <Icono/>) */}
-      <div className={posterClass}>
-        <div className="intro-circuit-bg" />
-
-        <video
-          ref={videoRef}
-          className="intro-video"
-          src={INTRO_VIDEO}
-          muted
-          loop
-          playsInline
-          preload="auto"
-        />
-
-        <div className={brandClass}>
-          <LogoWhite />
-          <Icono />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* =========================================================
-   APP — NAVEGACIÓN SPA + CONTROL DEL LOADING
-   ------------------------------------------------------------
-   Estado del loading (por VISITA de la web, no por ruta):
-
-     pendiente ──(primera llegada a Home de la visita)──► ejecutándose
-        ▲                                                        │
-        │                                                  onDone()│
-        │                                                        ▼
-        └────────── solo renace con NUEVA CARGA COMPLETA ──── completado
-                   de la web (F5, pestaña nueva, etc.)
-
-   Piezas:
-   · introPlayedRef (ref) → bandera "el loading ya se ejecutó
-     en esta visita". Se marca a true EN EL INSTANTE en que el
-     loading se dispara, por eso es imposible ejecutarlo dos
-     veces en la misma visita: ningún clic, back/forward,
-     re-render ni effect puede volver a encenderlo, porque el
-     único disparador verifica la bandera primero.
-   · La bandera NO se guarda en sessionStorage/localStorage
-     a propósito: vive en la memoria de la página, así que cada
-     carga completa del navegador (F5 / Ctrl+R, cerrar y abrir
-     pestaña, nueva visita) reinicia toda la app y el loading
-     vuelve a quedar pendiente.
-   · showIntro (estado) → encendido/apagado del loader. Solo se
-     enciende en dos puntos: arranque de la app directamente en
-     Home, o primera navegación (clic o back/forward) hacia "/"
-     con la bandera en false. Todo lo demás solo lo apaga.
-   · El loading NO está ligado a la ruta Home: Home es solo el
-     lugar donde se muestra si todavía está pendiente.
-   · Los <a href="/..."> existentes se interceptan y convierten
-     en pushState (sin recargar). Back/forward vía popstate.
+   La página entra directo, sin pantalla de carga: lo único
+   animado al llegar es el logo del navbar (ver UPBotLogo.jsx).
+   Los <a href="/..."> se interceptan y convierten en pushState
+   (sin recargar). Back/forward vía popstate.
    ========================================================= */
 
 function scrollTopInstant() {
@@ -2013,8 +1701,8 @@ function NotFound() {
   )
 }
 
-function PageRouter({ path, introDone }) {
-  if (path === '/' || path === '') return <Home introDone={introDone} />
+function PageRouter({ path }) {
+  if (path === '/' || path === '') return <Home />
 
   if (path === '/proyectos') return <ProjectsPage />
 
@@ -2035,52 +1723,18 @@ function PageRouter({ path, introDone }) {
 
 function App() {
   const [path, setPath] = useState(() => window.location.pathname)
-
-  /* Bandera "el loading YA se ejecutó en esta visita".
-     Nace marcada si la web arranca directamente en Home (ahí el
-     loading se dispara en el propio arranque); en cualquier otro
-     arranque nace pendiente. NO se persiste en storage: vive en
-     la memoria de la página, así que cada carga completa del
-     navegador (F5, pestaña nueva, nueva visita) la reinicia. */
-  const introPlayedRef = useRef(window.location.pathname === '/')
-
-  // Encendido/apagado del loader. Solo puede nacer encendido si
-  // la web arranca directamente en Home.
-  const [showIntro, setShowIntro] = useState(
-    () => window.location.pathname === '/'
-  )
   const lastPath = useRef(window.location.pathname)
 
-  /* Único punto que puede ENCENDER el loader durante la
-     navegación: llegar a Home con el loading aún pendiente.
-     La bandera se marca en el mismo instante en que se dispara
-     (→ una sola vez por visita, bajo ninguna circunstancia más).
-     Cualquier otra navegación solo lo apaga. Nada que dependa
-     de renders llama aquí: solo los handlers de navegación. */
-  const syncIntroWithRoute = useCallback((to) => {
-    if (to === '/' && !introPlayedRef.current) {
-      introPlayedRef.current = true // marcado AL dispararse
-      setShowIntro(true)
-    } else {
-      setShowIntro(false)
-    }
+  const goTo = useCallback((to) => {
+    scrollTopInstant()
+
+    // Mismo destino (ej. clic en el logo ya estando en Home)
+    if (to === lastPath.current) return
+
+    lastPath.current = to
+    window.history.pushState({}, '', to)
+    setPath(to)
   }, [])
-
-  const goTo = useCallback(
-    (to) => {
-      scrollTopInstant()
-
-      // Mismo destino (ej. clic en el logo ya estando en Home):
-      // no es una navegación nueva, no toca el loader.
-      if (to === lastPath.current) return
-
-      lastPath.current = to
-      window.history.pushState({}, '', to)
-      setPath(to)
-      syncIntroWithRoute(to)
-    },
-    [syncIntroWithRoute]
-  )
 
   useEffect(() => {
     // Evita que el navegador restaure scroll viejo con back/forward
@@ -2088,14 +1742,13 @@ function App() {
       window.history.scrollRestoration = 'manual'
     }
 
-    // back / forward del navegador (misma regla del loading)
+    // back / forward del navegador
     const onPopState = () => {
       const to = window.location.pathname
       scrollTopInstant()
       if (to === lastPath.current) return
       lastPath.current = to
       setPath(to)
-      syncIntroWithRoute(to)
     }
     window.addEventListener('popstate', onPopState)
 
@@ -2139,24 +1792,7 @@ function App() {
     }
   }, [goTo])
 
-  // Mientras corre el intro no se puede hacer scroll detrás de él
-  useEffect(() => {
-    if (!showIntro) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = previous
-    }
-  }, [showIntro])
-
-  return (
-    <>
-      {/* introDone: el tecleo del hero NO corre detrás del intro;
-          arranca desde cero cuando showIntro pasa a false */}
-      <PageRouter path={path} introDone={!showIntro} />
-      {showIntro && <IntroLoader onDone={() => setShowIntro(false)} />}
-    </>
-  )
+  return <PageRouter path={path} />
 }
 
 export default App

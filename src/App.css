@@ -113,7 +113,6 @@ main {
 .hero-copy,
 .section-intro,
 .project-tile,
-.editorial-row,
 .join-grid {
   min-width: 0;
 }
@@ -138,11 +137,9 @@ h1,
 h2,
 h3,
 .logo-lockup,
-.icono-lockup,
 .image-placeholder span,
 .proof-grid strong,
 .tile-info h3,
-.editorial-copy h3,
 .competition-list strong,
 .team-structure h2,
 .history-timeline h2,
@@ -195,17 +192,6 @@ h3,
 .logo-lockup {
   display: block;
   width: 120px;
-  height: auto;
-}
-
-/* Icono suelto (solo el robot). Su tamaño se controla ÚNICAMENTE
-   con este width: la altura es auto (proporciones intactas) y el
-   contenedor de alrededor nunca se encoge ni se deforma.
-   Dentro del intro su tamaño real lo manda --intro-icon-size
-   (ver la sección 18). */
-.icono-lockup {
-  display: block;
-  width: 48px;
   height: auto;
 }
 
@@ -430,8 +416,14 @@ h3,
 .placeholder-panel h2,
 .contact-panel h2 {
   margin: 25px 0 22px;
-  font: 400 clamp(52px, 7vw, 96px)/0.93 Space Grotesk, "Times New Roman", serif;
-  letter-spacing: -4px;
+  font: 400 clamp(36px, 4.4vw, 58px)/1.04 Space Grotesk, "Times New Roman", serif;
+  letter-spacing: -1.5px;
+}
+
+.hero h1 {
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 0.96;
+  letter-spacing: -3px;
 }
 
 .hero h1 em,
@@ -652,8 +644,8 @@ h3,
    ========================================================= */
 
 .proof-strip {
-  border-block: 1px solid var(--ink);
-  background: var(--yellow);
+  border-block: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .proof-grid {
@@ -669,7 +661,7 @@ h3,
   gap: 15px;
   min-height: 48px;
   padding: 0 24px;
-  border-right: 1px solid rgba(21, 23, 25, 0.22);
+  border-right: 1px solid var(--line);
   transition: color 0.25s ease;
 }
 
@@ -686,6 +678,7 @@ h3,
 }
 
 .proof-grid strong {
+  color: var(--blue);
   font: 400 37px/1 "Space Grotesk", serif;
 }
 
@@ -717,7 +710,7 @@ h3,
   }
 
   .proof-grid > div:nth-child(-n + 2) {
-    border-bottom: 1px solid rgba(21, 23, 25, 0.22);
+    border-bottom: 1px solid var(--line);
   }
 }
 
@@ -968,8 +961,8 @@ h3,
 .projects-preview,
 .team-preview,
 .collab-preview {
-  padding-top: 115px;
-  padding-bottom: 120px;
+  padding-top: 96px;
+  padding-bottom: 96px;
 }
 
 .section-intro {
@@ -989,7 +982,6 @@ h3,
 .section-intro h2 {
   max-width: 720px;
   margin-top: 0;
-  font-size: clamp(49px, 6vw, 78px);
   overflow-wrap: anywhere;
 }
 
@@ -1001,58 +993,7 @@ h3,
   overflow-wrap: anywhere;
 }
 
-/* ---------- Typewriter de títulos (SectionIntro) ----------
-   Versión JS del efecto del hero, para títulos multilínea: el
-   "ghost" invisible reserva el espacio final (nada baila
-   mientras se escribe) y el "live" absoluto encima va
-   mostrando el texto tecleado. El cursor parpadea mientras
-   escribe y se desvanece al terminar. */
-
-.typewriter-title {
-  position: relative;
-  display: block;
-}
-
-.typewriter-title-ghost {
-  visibility: hidden;
-}
-
-.typewriter-title-live {
-  position: absolute;
-  inset: 0;
-}
-
-.typewriter-title-caret {
-  display: inline-block;
-  width: 0;
-  height: 0.75em;
-  margin-left: 0.08em;
-  border-right: 0.06em solid currentColor;
-  animation: typewriter-title-blink 0.75s step-end infinite;
-}
-
-/* Al terminar: reemplaza el parpadeo por un fade a 0 */
-.typewriter-title-caret.is-done {
-  animation: typewriter-title-caret-out 0.5s ease forwards;
-}
-
-@keyframes typewriter-title-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-@keyframes typewriter-title-caret-out {
-  to { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .typewriter-title-caret {
-    display: none;
-  }
-}
-
-/* Título secundario: aparición simple (sin tecleo), para no competir
-   con el efecto de máquina de escribir de los títulos "de entrada". */
+/* Títulos de sección: aparición suave al entrar en pantalla */
 .reveal-heading {
   display: inline-block;
   opacity: 0;
@@ -1225,7 +1166,7 @@ h3,
    ========================================================= */
 
 .process-section {
-  padding: 110px 0 130px;
+  padding: 96px 0;
   background: var(--blue);
   color: white;
 }
@@ -1249,35 +1190,6 @@ h2.dark-h2 {
 .process-section .section-intro p,
 .dark-feature p {
   color: #c9d0da;
-}
-
-.editorial-stack {
-  display: grid;
-  gap: 72px;
-}
-
-.editorial-row,
-.editorial-row.reverse {
-  display: block;
-}
-
-.editorial-copy {
-  max-width: 560px;
-  margin-bottom: 34px;
-}
-
-.editorial-copy h3 {
-  margin: 20px 0 14px;
-  font: 400 clamp(42px, 5vw, 68px)/1 Space Grotesk, serif;
-}
-
-.editorial-copy p {
-  color: #c9d0da;
-  line-height: 1.6;
-}
-
-.editorial-copy .kicker {
-  color: var(--yellow);
 }
 
 /* ---------- Marquee ---------- */
@@ -1310,12 +1222,12 @@ h2.dark-h2 {
   margin-right: 12px;
 }
 
-.editorial-row:not(.reverse) .process-gallery-track {
-  animation: process-marquee-left var(--marquee-duration, 30s) linear infinite;
+.process-gallery-track {
+  animation: process-marquee-left var(--marquee-duration, 60s) linear infinite;
 }
 
-.editorial-row.reverse .process-gallery-track {
-  animation: process-marquee-right var(--marquee-duration, 30s) linear infinite;
+.process-gallery:hover .process-gallery-track {
+  animation-play-state: paused;
 }
 
 @keyframes process-marquee-left {
@@ -1325,16 +1237,6 @@ h2.dark-h2 {
 
   to {
     transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes process-marquee-right {
-  from {
-    transform: translate3d(-50%, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -1376,7 +1278,7 @@ h2.dark-h2 {
    ========================================================= */
 
 .dark-feature {
-  padding: 115px 0;
+  padding: 96px 0;
   background: var(--ink);
   color: white;
 }
@@ -1442,7 +1344,7 @@ h2.dark-h2 {
 }
 
 .wide-image {
-  height: 430px;
+  height: clamp(260px, 32vw, 380px);
 }
 
 
@@ -1451,7 +1353,7 @@ h2.dark-h2 {
    ========================================================= */
 
 .join-cta {
-  padding: 115px 0;
+  padding: 88px 0;
   background: var(--yellow);
 }
 
@@ -1469,7 +1371,7 @@ h2.dark-h2 {
 }
 
 .join-grid .image-slot {
-  height: 370px;
+  height: 320px;
   min-width: 0;
   width: 100%;
 }
@@ -1491,9 +1393,7 @@ h2.dark-h2 {
   margin-top: 24px;
 }
 
-.collab-preview {
-  min-height: 390px;
-}
+
 
 
 /* =========================================================
@@ -2062,11 +1962,6 @@ h2.dark-h2 {
 .detail-header h1 {
   margin: 20px 0;
   font: 400 clamp(64px, 9vw, 126px)/0.9 Space Grotesk, serif;
-}
-
-.detail-header h1 .typewriter-title-caret {
-  border-right-width: 0.04em;
-  height: 0.72em;
 }
 
 .detail-header p {
@@ -2719,312 +2614,6 @@ h2.dark-h2 {
 }
 
 /* =========================================================
-   18 · INTRO LOADER (entrada a la ruta Home)
-   ------------------------------------------------------------
-
-   Capas, de atrás hacia adelante (por orden del DOM, sin
-   z-indexes cruzados — el único z-index es el 500 del velo):
-     · .intro-loader     → velo azul oscuro a pantalla completa
-     · .intro-stack      → las fotos apiladas: cada una nueva cae
-                           ENCIMA de la anterior y ninguna se
-                           quita, así la imagen de atrás nunca
-                           desaparece
-     · .intro-poster     → tarjeta azul que entra sobre la pila y
-                           luego crece hasta llenar la pantalla
-     · .intro-circuit-bg → patrón de circuitos, siempre visible
-                           detrás del logo/icono (como en la demo)
-     · .intro-brand      → logo completo e icono compartiendo el
-                           MISMO centro; el logo hace zoom out y
-                           el icono toma su lugar
-
-   TAMAÑOS (cámbialos aquí, en un solo lugar):
-     · --intro-logo-width → ancho del logo blanco completo
-     · --intro-icon-size  → ancho del icono final (el robot)
-   Cambiar esas dos variables NO deforma nada más: la altura es
-   auto (proporciones intactas) y el contenedor no depende de
-   ellas.
-   ========================================================= */
-
-
-.intro-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 500;
-  background: var(--blue-dark);
-  transition:
-    opacity 0.5s ease,
-    visibility 0s linear 0.5s;
-}
-
-.intro-loader.is-leaving {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-/* ---------- Pila de fotos ---------- */
-
-.intro-stack {
-  position: absolute;
-  inset: 0;
-}
-
-.intro-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.55;
-}
-
-.intro-photo {
-  --intro-photo-width: min(94vw, 760px);
-  --intro-photo-height: 78vh;
-
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: auto;
-  height: auto;
-  max-width: var(--intro-photo-width);
-  max-height: var(--intro-photo-height);
-  opacity: 0;
-  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(0.88);
-  box-shadow:
-    0 26px 70px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
-  transition:
-    opacity 0.38s ease,
-    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
-    
-}
-/* Cada foto entra y SE QUEDA: nunca se oculta ni se quita. */
-.intro-photo.is-in {
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg)) scale(1);
-}
-
-/* ---------- Póster (tarjeta → pantalla completa) ---------- width: 60 y hight: 70*/
-
-.intro-poster {
-  --intro-logo-width: min(280px, 52vw);
-  --intro-icon-size: clamp(104px, 22vw, 168px);
-
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 55%;
-  height: 50%;
-  overflow: hidden;
-  background: var(--blue-dark);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.94);
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease,
-    width 0.7s cubic-bezier(0.65, 0, 0.35, 1),
-    height 0.7s cubic-bezier(0.65, 0, 0.35, 1),
-    box-shadow 0.5s ease;
-}
-
-.intro-poster.is-in {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* La tarjeta crece hasta EXACTAMENTE el tamaño del loader.
-   Porcentajes sobre el mismo contenedor: la transición
-   interpola suave y sin saltos (esto era lo que antes fallaba
-   al mezclar position/width/height no interpolables). */
-.intro-poster.is-full {
-  width: 100%;
-  height: 100%;
-  box-shadow: none;
-}
-
-/* ---------- Fondo de circuitos ---------- */
-
-
-.intro-circuit-bg {
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%2329385f' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M0 60 L60 60 L100 20'/%3E%3Cpath d='M0 100 L40 100 L80 140 L140 140'/%3E%3Cpath d='M180 0 L180 40 L220 80'/%3E%3Cpath d='M120 240 L120 190 L160 150'/%3E%3C/g%3E%3Cg fill='none' stroke='%23ffcf09' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M0 20 L30 20 L70 60 L140 60 L180 100 L180 140'/%3E%3Cpath d='M240 60 L200 60 L160 100'/%3E%3Cpath d='M60 240 L60 200 L20 160'/%3E%3C/g%3E%3Cg fill='%2329385f'%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Ccircle cx='140' cy='140' r='4'/%3E%3Ccircle cx='220' cy='80' r='3'/%3E%3C/g%3E%3Cg fill='%23ffcf09'%3E%3Ccircle cx='30' cy='20' r='4'/%3E%3Ccircle cx='180' cy='100' r='4'/%3E%3Ccircle cx='20' cy='160' r='3'/%3E%3Ccircle cx='180' cy='140' r='3'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 240px 240px;
-}
-
-/* ---------- Logo completo → icono ---------- */
-
-.intro-brand {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-}
-
-/* Logo e icono ocupan la misma celda del grid: comparten centro */
-.intro-brand > * {
-  grid-area: 1 / 1;
-}
-
-/* Logo blanco completo: primero entra grande… */
-.intro-brand .logo-lockup {
-  width: var(--intro-logo-width);
-  height: auto;
-  opacity: 0;
-  transform: scale(0.9);
-  transition:
-    opacity 0.45s ease,
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.intro-brand.is-logo .logo-lockup {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* …y al llegar a is-icon hace zoom out mientras el icono crece */
-.intro-brand.is-icon .logo-lockup {
-  opacity: 0;
-  transform: scale(0.42);
-}
-
-/* Icono: el tamaño se controla SOLO con --intro-icon-size.
-   La altura es auto, así que las proporciones del SVG se
-   respetan y nada a su alrededor cambia de tamaño. */
-.intro-brand .icono-lockup {
-  width: var(--intro-icon-size);
-  height: auto;
-  opacity: 0;
-  transform: scale(0.72);
-  filter: drop-shadow(0 0 28px rgba(255, 207, 9, 0.35));
-  transition:
-    opacity 0.5s ease 0.08s,
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.08s;
-}
-
-/* El icono toma el lugar del logo y SE QUEDA visible */
-.intro-brand.is-icon .icono-lockup {
-  opacity: 1;
-  transform: scale(1);
-  animation: intro-icon-breathe 3.2s ease-in-out 1s infinite;
-}
-
-@keyframes intro-icon-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.035);
-  }
-}
-
-/* ---------- Movimiento reducido ---------- */
-
-@media (prefers-reduced-motion: reduce) {
-  .intro-loader {
-    display: none;
-  }
-}
-
-/* =========================================================
-   18B · INTRO RESPONSIVE — EN CELULAR TODO VERTICAL
-   ------------------------------------------------------------
-   En celular vertical, las fotos de PCB dejan de salir
-   horizontales: se les fuerza un marco de RETRATO (3:4) y la
-   imagen se recorta con object-fit: cover para llenarlo.
-   Es preferible cortar un poco los lados a verla horizontal.
-   ========================================================= */
-/* =========================================================
-   INTRO · MODO VERTICAL (por orientación, NO por ancho)
-   Funciona en celulares Y iPad/tablet en retrato. En
-   horizontal todo usa las reglas base de escritorio.
-   ========================================================= */
-/* --- Fotos y póster vertical: mismo tamaño, UNA sola fuente --- */
-@media (orientation: portrait) {
-
-  /* Fotos y póster leen los MISMOS números.
-     Para agrandar todo, toca solo aquí. */
-  .intro-photo,
-  .intro-poster {
-    --intro-frame-width: min(90vw, 460px);   /* ← tus números del póster */
-    --intro-frame-max-height: 74svh;
-  }
-
-  .intro-photo {
-    width: var(--intro-frame-width);
-    height: auto;
-    max-width: var(--intro-frame-width);
-    max-height: var(--intro-frame-max-height);
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-  }
-
-  .intro-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .intro-poster {
-    width: var(--intro-frame-width);
-    /* Altura con calc() explícito, NO aspect-ratio aquí: el póster
-       se anima creciendo a pantalla completa transicionando
-       width/height, y height:auto no se puede animar. */
-    height: min(calc(var(--intro-frame-width) * 4 / 3), var(--intro-frame-max-height));
-  }
-}
-
-/* OPCIONAL — iPad/tablet vertical: sube el techo para que no se
-   vea chico en pantalla grande. Va SIEMPRE DESPUÉS del bloque
-   de arriba (mismo orden = gana este). */
-@media (orientation: portrait) and (min-width: 761px) {
-  .intro-photo,
-  .intro-poster {
-    --intro-frame-width: min(80vw, 640px);
-    --intro-frame-max-height: 82svh;
-  }
-}
-
-/* --- Celular en HORIZONTAL (pantalla corta) --- */
-/* Se detecta por ALTURA (≤520px): un celular acostado es ancho
-   pero bajo. El iPad horizontal (768px+ de alto) y el escritorio
-   quedan fuera y usan sus reglas base. */
-@media (orientation: landscape) and (max-height: 520px) {
-
-  /* Fotos y póster: MISMO marco horizontal 4:3, MISMO tamaño */
-  .intro-photo,
-  .intro-poster {
-    /* En horizontal lo escaso es la ALTURA: el tamaño nace de aquí */
-    --intro-frame-height: 70svh;   /* ← sube este número para agrandar */
-  }
-
-  .intro-photo {
-    height: var(--intro-frame-height);
-    width: auto;                 /* el ancho sale solo del 4:3 */
-    max-height: var(--intro-frame-height);
-    aspect-ratio: 4 / 3;         /* espejo exacto del 3:4 vertical */
-    object-fit: cover;
-  }
-
-  .intro-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .intro-poster {
-    height: var(--intro-frame-height);
-    width: calc(var(--intro-frame-height) * 4 / 3);  /* mismo 4:3 */
-  }
-}
-
-/* =========================================================
    20 · HOME EN MÓVIL
    ------------------------------------------------------------
    Títulos de sección a una columna (antes se partían a media
@@ -3040,7 +2629,7 @@ h2.dark-h2 {
   }
 
   .section-intro h2 {
-    font-size: clamp(36px, 10.5vw, 49px);
+    font-size: clamp(32px, 9vw, 42px);
     overflow-wrap: normal;
   }
 }
@@ -3082,5 +2671,214 @@ h2.dark-h2 {
 
   .tile-info b {
     margin-top: 12px;
+  }
+}
+
+
+/* =========================================================
+   21 · LOGO ANIMADO (navbar)
+   ------------------------------------------------------------
+   Solo en la primera carga de la visita (clase .is-intro, ver
+   UPBotLogo.jsx): las letras se descubren de izquierda a
+   derecha y la cabeza del robot cae, rebota y saluda. Al pasar
+   el mouse por el logo, la cabeza vuelve a saludar.
+   ========================================================= */
+
+.upbot-logo {
+  display: block;
+  width: 120px;
+  height: auto;
+  overflow: visible;
+}
+
+@media (max-width: 360px) {
+  .upbot-logo {
+    width: 96px;
+  }
+}
+
+.upbot-logo .logo-letters {
+  fill: currentColor;
+}
+
+.upbot-logo .logo-head {
+  fill: var(--yellow);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.nav-logo {
+  color: var(--ink);
+}
+
+.upbot-logo.is-intro .logo-letters {
+  animation: logo-letters-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.upbot-logo.is-intro .logo-head {
+  animation:
+    logo-head-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both,
+    logo-head-wave 0.7s ease-in-out 1.15s;
+}
+
+.nav-logo:hover .logo-head {
+  animation: logo-head-wave 0.7s ease-in-out;
+}
+
+@keyframes logo-letters-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.2;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes logo-head-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.6);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes logo-head-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg); }
+  55% { transform: rotate(9deg); }
+  80% { transform: rotate(-4deg); }
+}
+
+/* El hero acompaña la entrada sin pantalla de carga */
+.hero-copy > .kicker,
+.hero-copy > p,
+.hero-actions,
+.hero-image {
+  animation: hero-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-copy > .kicker { animation-delay: 0.05s; }
+.hero-copy > p { animation-delay: 0.9s; }
+.hero-actions { animation-delay: 1.05s; }
+.hero-image { animation-delay: 0.25s; }
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upbot-logo .logo-letters,
+  .upbot-logo .logo-head,
+  .nav-logo:hover .logo-head,
+  .hero-copy > .kicker,
+  .hero-copy > p,
+  .hero-actions,
+  .hero-image {
+    animation: none;
+  }
+}
+
+
+/* =========================================================
+   22 · CÓMO TRABAJAMOS — 4 PASOS
+   ------------------------------------------------------------
+   Antes eran 4 bloques con su propia galería (muy largo).
+   Ahora: 4 pasos en fila y debajo UNA tira de fotos.
+   ========================================================= */
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 56px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.process-step {
+  padding: 26px 28px 8px 0;
+}
+
+.process-step + .process-step {
+  padding-left: 28px;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.process-step span {
+  color: var(--yellow);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.process-step h3 {
+  margin: 16px 0 10px;
+  color: #fff;
+  font: 400 clamp(24px, 2.2vw, 30px)/1.1 "Space Grotesk", sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.process-step p {
+  margin: 0;
+  color: #c9d0da;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.process-image {
+  flex: 0 0 clamp(220px, 19vw, 300px);
+  width: clamp(220px, 19vw, 300px);
+  height: 220px;
+}
+
+@media (max-width: 900px) {
+  .process-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .process-step:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .process-step:nth-child(n + 3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+}
+
+@media (max-width: 560px) {
+  .process-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .process-step,
+  .process-step + .process-step {
+    padding: 22px 0 18px;
+    border-left: 0;
+  }
+
+  .process-step + .process-step {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .process-image {
+    flex-basis: 62vw;
+    width: 62vw;
+    height: 190px;
   }
 }
