@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
 import UPBotLogo from './UPBotLogo.jsx'
+import HeroRobot from './HeroRobot.jsx'
 
 /* =========================================================
    DATOS
@@ -301,18 +302,7 @@ const processGallery = processImages.design.flatMap((_, i) => [
    COMPONENTES BASE
    ========================================================= */
 
-import logoWhite from "./assets/UPBotWhite.svg";
-import icono from "./assets/icono.svg"; 
-
-function LogoWhite() {
-  return (
-    <img
-      src={logoWhite}
-      alt="UPBot"
-      className="logo-lockup"
-    />
-  );
-}
+import icono from './assets/upbot-head.svg'
 
 function ImageSlot({ src, label, alt = '', className = '', loading = 'lazy' }) {
   const [failed, setFailed] = useState(false)
@@ -616,7 +606,7 @@ function Footer() {
       <FooterTicker />
       <div className="shell footer-grid">
         <div>
-          <LogoWhite />
+          <UPBotLogo playIntro={false} />
           <p>
             Convertir a UPbot en un equipo universitario reconocido por su
             innovación, comunidad y desarrollo tecnológico.
@@ -710,11 +700,7 @@ function Home() {
             </div>
           </div>
 
-          <ImageSlot
-            src="/images/hero-robot.webp"
-            label="Robot de UPBot"
-            className="hero-image"
-          />
+          <HeroRobot />
         </section>
 
         {/* ---------- POR QUÉ UPBOT (dolor) ---------- */}
