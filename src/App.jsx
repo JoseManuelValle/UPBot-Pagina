@@ -68,8 +68,8 @@ const competitions = ['RoboMatrix', 'TMR', 'RoboRAVE', 'RoboSTEM']
    la anterior, por eso se ve como una ola pasando de
    izquierda a derecha.
 
-   Los logos usan demoLogo() como imagen TEMPORAL hasta que
-   existan los archivos reales.
+   Si una organización aún no tiene logo (logo: null) se muestra
+   su nombre como texto. Si no tiene url, no es un enlace.
 
    Para agregar más organizaciones: solo agrega más objetos aquí
    abajo (se reparten solos entre las posiciones). Si cambias
@@ -82,24 +82,13 @@ const SPONSOR_SEGMENT_SECONDS = 5 // cuánto se ve cada logo antes de cambiar
 const SPONSOR_TRANSITION_SECONDS = 0.7 // duración del cross-fade
 const SPONSOR_WAVE_STAGGER = 0.6 // retraso entre una posición y la siguiente
 
-/* Genera una imagen de prueba "al vuelo" (no es un archivo real)
-   solo para poder VER la animación funcionando mientras no haya
-   logos de verdad. BÓRRALA cuando pongas las rutas reales. */
-function demoLogo(text) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="140" height="40">
-    <rect width="100%" height="100%" rx="4" fill="#e3e6ee"/>
-    <text x="50%" y="56%" font-family="sans-serif" font-size="11" fill="#29385f" text-anchor="middle">${text}</text>
-  </svg>`
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
-}
-
 const sponsorPool = [
-  { name: 'Universidad Panamericana', logo: '/images/Logo UP.svg', url: '#' },
-  { name: 'Facultad de Ingeniería', logo: '/images/Facultad Ing.svg', url: '#' },
-  { name: 'IMEP', logo: demoLogo('IMEP'), url: '#' },
-  { name: 'Mexbit', logo: '/images/Mexbit.svg', url: '#'},
-  { name: 'Ingusa', logo: '/images/logo-ingusa.svg', url: '#'},
-  { name: 'Altium', logo: '/images/logo-altium.svg', url: '#'},
+  { name: 'Universidad Panamericana', logo: '/images/Logo UP.svg', url: 'https://www.up.edu.mx' },
+  { name: 'Facultad de Ingeniería', logo: '/images/Facultad Ing.svg', url: null },
+  { name: 'IMEP', logo: null, url: null },
+  { name: 'Mexbit', logo: '/images/Mexbit.svg', url: null },
+  { name: 'Ingusa', logo: '/images/logo-ingusa.svg', url: null },
+  { name: 'Altium', logo: '/images/logo-altium.svg', url: 'https://www.altium.com' },
 ]
 
 const painPoints = [
@@ -252,30 +241,31 @@ const placeholderSections = {
   },
 }
 
+// caption: texto que se muestra (y alt) mientras la foto no exista
 const processImages = {
   design: [
-    '/images/manufacturing-01.webp',
-    '/images/manufacturing-02.webp',
-    '/images/components-01.webp',
-    '/images/design-01.webp',
+    { src: '/images/manufacturing-01.webp', caption: 'Manufactura' },
+    { src: '/images/manufacturing-02.webp', caption: 'Prototipos' },
+    { src: '/images/components-01.webp', caption: 'Componentes' },
+    { src: '/images/design-01.webp', caption: 'Diseño CAD' },
   ],
   build: [
-    '/images/team-working-01.webp',
-    '/images/team-working-02.webp',
-    '/images/manufacturing-03.webp',
-    '/images/build-01.webp',
+    { src: '/images/team-working-01.webp', caption: 'Trabajo en equipo' },
+    { src: '/images/team-working-02.webp', caption: 'Ensamble' },
+    { src: '/images/manufacturing-03.webp', caption: 'Fabricación' },
+    { src: '/images/build-01.webp', caption: 'Chasis' },
   ],
   program: [
-    '/images/programming-01.webp',
-    '/images/electronics-01.webp',
-    '/images/testing-01.webp',
-    '/images/programming-02.webp',
+    { src: '/images/programming-01.webp', caption: 'Programación' },
+    { src: '/images/electronics-01.webp', caption: 'Electrónica' },
+    { src: '/images/testing-01.webp', caption: 'Pruebas' },
+    { src: '/images/programming-02.webp', caption: 'Control' },
   ],
   competition: [
-    '/images/competition-01.webp',
-    '/images/competition-02.webp',
-    '/images/team-working-03.webp',
-    '/images/competition-03.webp',
+    { src: '/images/competition-01.webp', caption: 'Competencia' },
+    { src: '/images/competition-02.webp', caption: 'En la arena' },
+    { src: '/images/team-working-03.webp', caption: 'El equipo' },
+    { src: '/images/competition-03.webp', caption: 'Resultados' },
   ],
 }
 
@@ -330,30 +320,25 @@ function ImageSlot({ src, label, alt = '', className = '', loading = 'lazy' }) {
         onError={() => setFailed(true)}
       />
 
+      {/* Sin foto: tarjeta de marca con el icono y el nombre */}
       {failed && (
-        <div className="image-placeholder">
-          <span>IMG / SLOT</span>
-          <strong>[{label}]</strong>
-          <small>{src}</small>
+        <div className="image-placeholder" aria-hidden="true">
+          <img src={icono} alt="" />
+          <span>{label}</span>
         </div>
       )}
-
-      <figcaption>{label}</figcaption>
     </figure>
   )
 }
 
 function SponsorLogo({ name, logo, url, active }) {
   const [failed, setFailed] = useState(false)
+  const Tag = url ? 'a' : 'span'
+  const linkProps = url ? { href: url, target: '_blank', rel: 'noopener noreferrer' } : {}
 
   return (
-    <a
-      className={`sponsor-logo ${failed ? 'is-placeholder' : active ? 'is-active' : ''}`}
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {!failed ? (
+    <Tag className={`sponsor-logo ${active ? 'is-active' : ''}`} {...linkProps}>
+      {logo && !failed ? (
         <img
           src={logo}
           alt={name}
@@ -362,12 +347,9 @@ function SponsorLogo({ name, logo, url, active }) {
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="sponsor-fallback">
-          <small>IMG / SLOT</small>
-          <strong>{name}</strong>
-        </span>
+        <span className="sponsor-fallback">{name}</span>
       )}
-    </a>
+    </Tag>
   )
 }
 
@@ -744,7 +726,7 @@ function Footer() {
    COMPONENTES DE SECCIÓN
    ========================================================= */
 
-function PlaceholderBand({ images, label, text = '[SHORT DESCRIPTION PLACEHOLDER]', children, reverse = false, speed = 1 }) {
+function PlaceholderBand({ images, label, text, children, reverse = false, speed = 1 }) {
   return (
     <article className={`editorial-row ${reverse ? 'reverse' : ''}`}>
       <div className="editorial-copy">
@@ -755,7 +737,7 @@ function PlaceholderBand({ images, label, text = '[SHORT DESCRIPTION PLACEHOLDER
 
       <div
         className="process-gallery"
-        aria-label={`${label} gallery`}
+        aria-label={`Galería: ${label}`}
         style={{ '--marquee-duration': `${30 / speed}s` }}
       >
         <div className="process-gallery-track">
@@ -766,11 +748,11 @@ function PlaceholderBand({ images, label, text = '[SHORT DESCRIPTION PLACEHOLDER
             >
               {group.map((image, index) => (
                 <ImageSlot
-                  src={image}
-                  label={`${label} ${String(index + 1).padStart(2, '0')}`}
+                  src={image.src}
+                  label={image.caption}
                   className="process-image"
                   loading="eager"
-                  key={`${image}-${groupIndex}-${index}`}
+                  key={`${image.src}-${groupIndex}-${index}`}
                 />
               ))}
             </div>
@@ -813,7 +795,7 @@ function Home({ introDone = true }) {
 
           <ImageSlot
             src="/images/hero-robot.webp"
-            label="HERO ROBOT IMAGE"
+            label="Robot de UPBot"
             className="hero-image"
           />
         </section>
@@ -846,15 +828,15 @@ function Home({ introDone = true }) {
           <div className="shell proof-grid">
             <div>
               <strong>24</strong>
-              <span>estudiantes<br />[CONFIRMAR DATO]</span>
+              <span>estudiantes<br />en el equipo</span>
             </div>
             <div>
               <strong>04</strong>
-              <span>proyectos<br />[CONFIRMAR DATO]</span>
+              <span>proyectos<br />en desarrollo</span>
             </div>
             <div>
               <strong>2020</strong>
-              <span>inicio del proyecto<br />[CONFIRMAR DATO]</span>
+              <span>año en que<br />empezamos</span>
             </div>
             <div>
               <strong>→</strong>
@@ -890,7 +872,7 @@ function Home({ introDone = true }) {
           <SectionIntro
             number="01 / PROYECTOS"
             title="Nuestros proyectos"
-            text="[PROJECTS INTRO PLACEHOLDER]"
+            text="Cuatro robots, cuatro retos distintos. Cada proyecto tiene su propio equipo y se prepara para una competencia específica."
             link="/proyectos"
           />
 
@@ -903,7 +885,7 @@ function Home({ introDone = true }) {
               >
                 <ImageSlot
                   src={project.image}
-                  label={`${project.name.toUpperCase()} IMAGE`}
+                  label={project.name}
                   className="tile-image"
                 />
                 <div className="tile-info">
@@ -923,27 +905,38 @@ function Home({ introDone = true }) {
             <SectionIntro
               number="02 / CÓMO TRABAJAMOS"
               title="Del concepto a la competencia."
-              text="[PROCESS INTRO PLACEHOLDER]"
+              text="Cada robot pasa por el mismo ciclo: lo diseñamos, lo construimos, lo programamos y lo llevamos a competir. Después volvemos a empezar con lo aprendido."
             />
 
             <div className="editorial-stack">
               <PlaceholderBand
                 images={processImages.design}
-                label="DESIGN IMAGE"
+                label="Diseño"
                 speed={0.8}
                 text="Diseñamos y desarrollamos proyectos. Convertimos ideas en soluciones reales a través de ingeniería, creatividad y experimentación práctica."
               >
                 Diseñamos.
               </PlaceholderBand>
-              <PlaceholderBand images={processImages.build} label="BUILD IMAGE" reverse speed={1.15}>
+              <PlaceholderBand
+                images={processImages.build}
+                label="Construcción"
+                reverse
+                speed={1.15}
+                text="Fabricamos y ensamblamos cada pieza: chasis, PCBs y mecanismos. Aquí la teoría se convierte en algo que puedes tocar."
+              >
                 Construimos.
               </PlaceholderBand>
-              <PlaceholderBand images={processImages.program} label="PROGRAM IMAGE" speed={0.65}>
+              <PlaceholderBand
+                images={processImages.program}
+                label="Programación"
+                speed={0.65}
+                text="Escribimos el código que le da vida al robot: sensores, control y estrategia, probados una y otra vez hasta que funcionan."
+              >
                 Programamos.
               </PlaceholderBand>
               <PlaceholderBand
                 images={processImages.competition}
-                label="COMPETITION IMAGE"
+                label="Competencia"
                 reverse
                 speed={1.3}
                 text="Probamos, competimos y aprendemos. Aplicamos nuestros conocimientos en competencias y experiencias reales donde cada desafío forma parte del aprendizaje."
@@ -993,14 +986,14 @@ function Home({ introDone = true }) {
           />
           <ImageSlot
             src="/images/team.webp"
-            label="TEAM IMAGE"
+            label="El equipo UPBot"
             className="wide-image"
           />
         </section>
 
         {/* ---------- TESTIMONIOS ---------- */}
         <section className="testimonials-section shell">
-          <span className="kicker">TESTIMONIOS</span>
+          <span className="kicker">05 / TESTIMONIOS</span>
           <h2><RevealHeading>Lo que dicen nuestros miembros</RevealHeading></h2>
 
           <div className="testimonials-grid">
@@ -1023,10 +1016,10 @@ function Home({ introDone = true }) {
           <div className="shell join-grid">
             <ImageSlot
               src="/images/team-working-02.webp"
-              label="TEAM WORKING IMAGE"
+              label="Únete a UPBot"
             />
             <div>
-              <span className="kicker">08 / ÚNETE A UPBOT</span>
+              <span className="kicker">06 / ÚNETE A UPBOT</span>
               <h2 className="dark-h2">
                 <TypewriterTitle text="¿Quieres construir algo real?" />
               </h2>
@@ -1039,9 +1032,9 @@ function Home({ introDone = true }) {
         {/* ---------- COLABORA ---------- */}
         <section className="collab-preview shell">
           <SectionIntro
-            number="09 / COLABORA"
-            title="[COLLABORATION HEADLINE]"
-            text="[COLLABORATION INTRO PLACEHOLDER]"
+            number="07 / COLABORA"
+            title="Ayúdanos a llegar más lejos."
+            text="Empresas y organizaciones pueden apoyar a UPBot con patrocinio, componentes, materiales o manufactura. Tu apoyo se convierte directamente en robots, viajes a competencias y estudiantes mejor preparados."
             link="/colabora"
           />
         </section>
@@ -1077,7 +1070,7 @@ function ProjectsPage() {
             >
               <ImageSlot
                 src={project.image}
-                label={`${project.name.toUpperCase()} IMAGE`}
+                label={project.name}
               />
               <div>
                 <span>{project.competition}</span>
@@ -1119,7 +1112,7 @@ function ProjectPage({ project }) {
           </div>
           <ImageSlot
             src={project.image}
-            label={`${project.name.toUpperCase()} IMAGE`}
+            label={project.name}
           />
         </div>
 

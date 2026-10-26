@@ -139,7 +139,7 @@ h2,
 h3,
 .logo-lockup,
 .icono-lockup,
-.image-placeholder strong,
+.image-placeholder span,
 .proof-grid strong,
 .tile-info h3,
 .editorial-copy h3,
@@ -149,7 +149,7 @@ h3,
 .competition-module h3,
 .project-row h3,
 .detail-header h1,
-.sponsor-fallback strong {
+.sponsor-fallback {
   font-family: "Space Grotesk", sans-serif !important;
 }
 
@@ -601,6 +601,9 @@ h3,
   opacity: 1;
 }
 
+/* Mientras no exista la foto: tarjeta de marca (azul profundo,
+   patrón de circuitos del intro, icono amarillo y el nombre).
+   Se ve intencional en lugar de un hueco vacío. */
 .image-placeholder {
   position: absolute;
   inset: 0;
@@ -608,49 +611,38 @@ h3,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  background-color: #e8e9e4;
-  background-image:
-    linear-gradient(rgba(41, 56, 95, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(41, 56, 95, 0.08) 1px, transparent 1px);
-  background-size: 25px 25px;
-  color: var(--blue);
+  gap: 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 40%, rgba(41, 56, 95, 0) 0%, rgba(13, 18, 33, 0.55) 100%),
+    var(--blue-dark);
+  color: rgba(255, 255, 255, 0.72);
   text-align: center;
 }
 
 .image-placeholder::before {
-  content: "+";
+  content: "";
   position: absolute;
-  top: 17px;
-  right: 20px;
-  font-size: 28px;
-  font-weight: 300;
+  inset: 0;
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M0 60 L60 60 L100 20'/%3E%3Cpath d='M0 100 L40 100 L80 140 L140 140'/%3E%3Cpath d='M180 0 L180 40 L220 80'/%3E%3Cpath d='M120 240 L120 190 L160 150'/%3E%3C/g%3E%3Cg fill='none' stroke='%23ffcf09' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M0 20 L30 20 L70 60 L140 60 L180 100 L180 140'/%3E%3Cpath d='M240 60 L200 60 L160 100'/%3E%3Cpath d='M60 240 L60 200 L20 160'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Ccircle cx='140' cy='140' r='4'/%3E%3Ccircle cx='220' cy='80' r='3'/%3E%3C/g%3E%3Cg fill='%23ffcf09'%3E%3Ccircle cx='30' cy='20' r='4'/%3E%3Ccircle cx='180' cy='100' r='4'/%3E%3Ccircle cx='20' cy='160' r='3'/%3E%3Ccircle cx='180' cy='140' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
-.image-placeholder span,
-.image-placeholder small {
-  font: 800 9px/1 "Trebuchet MS";
-  letter-spacing: 1.4px;
+.image-slot .image-placeholder img {
+  position: relative;
+  width: clamp(44px, 18%, 96px);
+  height: auto;
+  min-height: 0;
+  opacity: 0.95;
 }
 
-.image-placeholder strong {
-  font: 400 26px/1 Space Grotesk, serif;
-}
-
-.image-placeholder small {
-  color: var(--muted);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-.image-slot figcaption {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  color: var(--blue);
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 1px;
+.image-placeholder span {
+  position: relative;
+  max-width: 85%;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
   text-transform: uppercase;
 }
 
@@ -702,6 +694,42 @@ h3,
   font-weight: 900;
   line-height: 1.35;
   text-transform: uppercase;
+}
+
+/* Tablet y móvil: 2 × 2 para que ninguna cifra se recorte */
+@media (max-width: 900px) {
+  .proof-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding-block: 10px;
+  }
+
+  .proof-grid > div {
+    min-height: 76px;
+    padding: 0 18px;
+  }
+
+  .proof-grid > div:nth-child(odd) {
+    padding-left: 0;
+  }
+
+  .proof-grid > div:nth-child(even) {
+    border-right: 0;
+  }
+
+  .proof-grid > div:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(21, 23, 25, 0.22);
+  }
+}
+
+@media (max-width: 420px) {
+  .proof-grid strong {
+    font-size: 30px;
+  }
+
+  .proof-grid > div {
+    gap: 10px;
+    padding: 0 12px;
+  }
 }
 
 
@@ -767,17 +795,6 @@ h3,
   z-index: 2;
 }
 
-/* Mientras el logo real no exista (404), se queda fijo y visible
-   -sin importar de quién sea el turno- para que sea imposible no
-   ver dónde va cada patrocinador. */
-.sponsor-logo.is-placeholder {
-  z-index: 3;
-  opacity: 1;
-  filter: none;
-  transform: none;
-  transition: none;
-}
-
 .sponsor-logo img {
   display: block;
   max-height: 100%;
@@ -785,34 +802,14 @@ h3,
   object-fit: contain;
 }
 
+/* Organización sin logo todavía: su nombre como "wordmark" */
 .sponsor-fallback {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 4px 6px;
-  border: 1px dashed rgba(41, 56, 95, 0.35);
-  background-color: #e8e9e4;
-  background-image:
-    linear-gradient(rgba(41, 56, 95, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(41, 56, 95, 0.08) 1px, transparent 1px);
-  background-size: 10px 10px;
   color: var(--blue);
-  text-align: center;
-}
-
-.sponsor-fallback small {
-  font: 800 7px/1 "Trebuchet MS";
+  font-size: 22px;
+  font-weight: 700;
   letter-spacing: 1px;
+  line-height: 1;
   text-transform: uppercase;
-  color: var(--muted);
-}
-
-.sponsor-fallback strong {
-  font: 700 10px/1.1 "Space Grotesk", sans-serif;
 }
 
 
@@ -3024,5 +3021,66 @@ h2.dark-h2 {
   .intro-poster {
     height: var(--intro-frame-height);
     width: calc(var(--intro-frame-height) * 4 / 3);  /* mismo 4:3 */
+  }
+}
+
+/* =========================================================
+   20 · HOME EN MÓVIL
+   ------------------------------------------------------------
+   Títulos de sección a una columna (antes se partían a media
+   palabra), márgenes laterales más estrechos y tarjetas de
+   proyecto con la imagen arriba del texto.
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .section-intro {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .section-intro h2 {
+    font-size: clamp(36px, 10.5vw, 49px);
+    overflow-wrap: normal;
+  }
+}
+
+@media (max-width: 560px) {
+  .shell {
+    width: calc(100% - 40px);
+  }
+
+  .projects-preview .project-table {
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    height: auto;
+    aspect-ratio: auto;
+  }
+
+  .project-table .project-tile {
+    grid-template-columns: 1fr;
+    grid-template-rows: 190px auto;
+    min-height: 0;
+  }
+
+  .project-table .tile-image {
+    height: 190px;
+  }
+
+  .tile-2 .tile-image,
+  .tile-3 .tile-image {
+    order: 0;
+  }
+
+  .tile-info h3 {
+    margin-top: 14px;
+  }
+
+  .tile-info p {
+    font-size: 13px;
+  }
+
+  .tile-info b {
+    margin-top: 12px;
   }
 }
