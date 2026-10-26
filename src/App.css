@@ -2883,3 +2883,45 @@ h2.dark-h2 {
     height: 190px;
   }
 }
+
+
+/* =========================================================
+   23 · ESQUINAS REDONDEADAS
+   ------------------------------------------------------------
+   Botones tipo píldora y tarjetas/fotos con esquinas de 14px.
+   Para cambiar el nivel de todo el sitio, ajusta --radius.
+   ========================================================= */
+
+:root {
+  --radius: 14px;
+  --radius-lg: 22px;
+}
+
+.button,
+.nav-join {
+  border-radius: 999px;
+}
+
+.button {
+  padding: 14px 22px;
+}
+
+.nav-join {
+  padding: 12px 20px;
+}
+
+.image-slot,
+.testimonial-card,
+.project-table .project-tile {
+  border-radius: var(--radius);
+}
+
+/* La foto dentro de una tarjeta ya la recorta la tarjeta */
+.project-tile .image-slot,
+.project-row .image-slot {
+  border-radius: 0;
+}
+
+.contact-panel {
+  border-radius: var(--radius-lg);
+}
