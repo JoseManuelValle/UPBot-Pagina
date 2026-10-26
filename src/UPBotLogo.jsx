@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react'
    Dibujo oficial: src/assets/upbot-logo-oficial.svg (enviado
    por Carlo Gordillo). Está en línea para animar sus piezas:
      · .logo-letters → "UPbot"
-     · .logo-head    → la cabeza del robot (cara, aro, antena y ojos)
+     · .logo-head    → la cabeza del robot (aro, antena y ojos)
      · .logo-eyes    → los ojos, que parpadean
-   Los colores salen de variables CSS (--logo-letters, --logo-eyes,
-   --logo-ring, --logo-face, --logo-antenna; ver App.css), así
-   el navbar y el footer usan cada uno su combinación.
+   Colores como el logo anterior: letras negras (blancas en el
+   footer) y cabeza amarilla. Salen de variables CSS
+   (--logo-letters y --logo-head; ver App.css).
 
    La animación de entrada solo corre la PRIMERA vez que se
    monta en la visita (al navegar entre páginas ya no se
@@ -57,8 +57,6 @@ export default function UPBotLogo({ className = '', playIntro = true }) {
           setWaving(false)
         }}
       >
-        {/* cara: relleno detrás del aro (no viene en el SVG original) */}
-        <rect className="logo-face" x="8801" y="3644" width="2092" height="1521" rx="760.5" />
         <g className="logo-ring">
           <path d="M9562.043,5165.335c-419.801,0 -760.625,-340.824 -760.625,-760.625c0,-419.801 340.824,-760.625 760.625,-760.625c83.133,0 163.169,13.366 238.076,38.065c2.988,0.986 5.966,1.987 8.939,3.009c12.9,4.433 25.642,9.204 38.22,14.3c110.278,44.694 207.73,114.52 285.234,202.354c13.688,15.514 26.753,31.587 39.157,48.184c-12.906,-1.101 -25.968,-1.661 -39.157,-1.661l-570.469,0c-13.189,0 -26.251,0.56 -39.157,1.661c-233.579,19.886 -417.218,216.024 -417.218,454.714c0,238.69 183.639,434.828 417.218,454.714c12.906,1.101 25.968,1.661 39.157,1.661l570.469,0c13.189,0 26.251,-0.56 39.157,-1.661c-12.404,16.597 -25.469,32.67 -39.157,48.184c-77.505,87.834 -174.956,157.659 -285.234,202.354c-88.102,35.707 -184.388,55.374 -285.234,55.374Z" />
           <path d="M9562.043,3644.085l570.469,0l0,304.25l-570.469,0l0,-304.25Zm570.469,1521.251l-570.469,0l0,-304.25l570.469,0l0,304.25Z" />
