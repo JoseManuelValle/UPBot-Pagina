@@ -2699,8 +2699,18 @@ h2.dark-h2 {
 }
 
 .upbot-logo {
-  fill: currentColor;
+  --logo-letters: var(--blue);
+  --logo-ring: var(--yellow);
+  --logo-eyes: var(--blue);
+  --logo-face: var(--yellow);
+  --logo-antenna: var(--yellow);
 }
+
+.upbot-logo .logo-letters { fill: var(--logo-letters); }
+.upbot-logo .logo-ring { fill: var(--logo-ring); }
+.upbot-logo .logo-eyes { fill: var(--logo-eyes); }
+.upbot-logo .logo-face { fill: var(--logo-face); }
+.upbot-logo .logo-antenna { fill: var(--logo-antenna); }
 
 .upbot-logo .logo-head {
   transform-box: fill-box;
@@ -2714,7 +2724,8 @@ h2.dark-h2 {
 
 .footer .upbot-logo {
   width: 150px;
-  color: #fff;
+  --logo-letters: #fff;
+  --logo-eyes: var(--blue-dark);
 }
 
 .nav-logo {
