@@ -11,12 +11,17 @@ import { useEffect, useState } from 'react'
    La animación de entrada solo corre la PRIMERA vez que se
    monta en la visita (al navegar entre páginas ya no se
    repite). Al pasar el mouse la cabeza vuelve a saludar.
+
+   El saludo del hover lo controla JS (no :hover en CSS): una
+   vez que empieza siempre termina completo, aunque el mouse
+   salga y vuelva a entrar, y no interrumpe la entrada.
    ========================================================= */
 
 let logoIntroPlayed = false
 
 export default function UPBotLogo({ className = '' }) {
-  const [animate] = useState(!logoIntroPlayed)
+  const [intro, setIntro] = useState(!logoIntroPlayed)
+  const [waving, setWaving] = useState(false)
 
   useEffect(() => {
     logoIntroPlayed = true
@@ -24,10 +29,13 @@ export default function UPBotLogo({ className = '' }) {
 
   return (
     <svg
-      className={`upbot-logo ${animate ? 'is-intro' : ''} ${className}`}
+      className={`upbot-logo ${intro ? 'is-intro' : ''} ${waving ? 'is-waving' : ''} ${className}`}
       viewBox="0 0 288.48141 55.972103"
       role="img"
       aria-label="UPBot"
+      onMouseEnter={() => {
+        if (!intro) setWaving(true)
+      }}
     >
       <g transform="translate(21.325865,-120.25777)">
         <path
@@ -36,6 +44,11 @@ export default function UPBotLogo({ className = '' }) {
         />
         <path
           className="logo-head"
+          onAnimationEnd={(event) => {
+            if (event.animationName !== 'logo-head-wave') return
+            setIntro(false)
+            setWaving(false)
+          }}
           d="m 192.40949,120.25776 a 4.4509727,4.4509727 0 0 0 -4.45097,4.45098 4.4509727,4.4509727 0 0 0 3.56515,4.3619 v 4.69286 h -7.43627 c -11.55653,0 -20.86028,9.47015 -20.86028,21.23332 0,11.76318 9.30375,21.23303 20.86028,21.23303 h 16.64417 c 11.55654,0 20.85997,-9.46985 20.85997,-21.23303 0,-11.76317 -9.30343,-21.23332 -20.85997,-21.23332 h -7.43659 v -4.69286 a 4.4509727,4.4509727 0 0 0 3.56547,-4.3619 4.4509727,4.4509727 0 0 0 -4.45096,-4.45098 z m -8.53928,21.90744 h 17.07855 c 6.58592,0 11.88787,5.72301 11.88787,12.83162 0,7.10862 -5.30195,12.83132 -11.88787,12.83132 h -17.07855 c -6.58594,0 -11.88817,-5.7227 -11.88817,-12.83132 0,-7.10861 5.30223,-12.83162 11.88817,-12.83162 z m -1.11793,8.34099 a 4.4509727,4.4509727 0 0 0 -4.45097,4.45099 4.4509727,4.4509727 0 0 0 4.45097,4.45096 4.4509727,4.4509727 0 0 0 4.45099,-4.45096 4.4509727,4.4509727 0 0 0 -4.45099,-4.45099 z m 19.12101,0 a 4.4509727,4.4509727 0 0 0 -4.45097,4.45099 4.4509727,4.4509727 0 0 0 4.45097,4.45096 4.4509727,4.4509727 0 0 0 4.45097,-4.45096 4.4509727,4.4509727 0 0 0 -4.45097,-4.45099 z"
         />
       </g>

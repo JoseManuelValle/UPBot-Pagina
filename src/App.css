@@ -2681,7 +2681,8 @@ h2.dark-h2 {
    Solo en la primera carga de la visita (clase .is-intro, ver
    UPBotLogo.jsx): las letras se descubren de izquierda a
    derecha y la cabeza del robot cae, rebota y saluda. Al pasar
-   el mouse por el logo, la cabeza vuelve a saludar.
+   el mouse por el logo, la cabeza vuelve a saludar (.is-waving,
+   lo pone y lo quita UPBotLogo.jsx al terminar el saludo).
    ========================================================= */
 
 .upbot-logo {
@@ -2721,8 +2722,8 @@ h2.dark-h2 {
     logo-head-wave 0.7s ease-in-out 1.15s;
 }
 
-.nav-logo:hover .logo-head {
-  animation: logo-head-wave 0.7s ease-in-out;
+.upbot-logo.is-waving .logo-head {
+  animation: logo-head-wave 0.8s ease-in-out;
 }
 
 @keyframes logo-letters-in {
@@ -2784,7 +2785,7 @@ h2.dark-h2 {
 @media (prefers-reduced-motion: reduce) {
   .upbot-logo .logo-letters,
   .upbot-logo .logo-head,
-  .nav-logo:hover .logo-head,
+  .upbot-logo.is-waving .logo-head,
   .hero-copy > .kicker,
   .hero-copy > p,
   .hero-actions,
