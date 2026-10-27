@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://upbot-robotics.vercel.app/sitemap.xml

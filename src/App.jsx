@@ -230,7 +230,7 @@ const coreValues = [
   },
   {
     title: 'Visión',
-    text: 'Convertir a UPbot en un equipo universitario reconocido por su innovación, comunidad y desarrollo tecnológico.',
+    text: 'Convertir a UPBot en un equipo universitario reconocido por su innovación, comunidad y desarrollo tecnológico.',
   },
 ]
 
@@ -245,7 +245,7 @@ const valuesList = [
 
 const placeholderSections = {
   '/equipo': {
-    eyebrow: '05 / EQUIPO',
+    eyebrow: '04 / EQUIPO',
     title: 'Detrás de cada robot hay un equipo.',
     intro:
       'La robótica puede parecer complicada o lejana al principio, pero descubrimos que cuando existe trabajo en equipo, mentoría y un espacio para experimentar, aprender se vuelve mucho más humano y accesible.',
@@ -253,7 +253,7 @@ const placeholderSections = {
     kind: 'team',
   },
   '/competencias': {
-    eyebrow: '06 / COMPETENCIAS',
+    eyebrow: '03 / COMPETENCIAS',
     title: 'Ponemos nuestros robots a prueba.',
     intro:
       'Participar en competencias y eventos de innovación aplicando conocimientos en entornos reales.',
@@ -261,10 +261,10 @@ const placeholderSections = {
     kind: 'competitions',
   },
   '/nosotros': {
-    eyebrow: '07 / NOSOTROS',
+    eyebrow: 'UPBOT / NOSOTROS',
     title: 'Una organización universitaria que aprende haciendo.',
     intro:
-      'UPbot nació porque muchos estudiantes sentíamos que aprender solo teoría no era suficiente. Queríamos un espacio donde pudiéramos construir proyectos reales, experimentar, equivocarnos y aprender haciendo.',
+      'UPBot nació porque muchos estudiantes sentíamos que aprender solo teoría no era suficiente. Queríamos un espacio donde pudiéramos construir proyectos reales, experimentar, equivocarnos y aprender haciendo.',
     image: '/images/team-working-01.webp',
     kind: 'history',
   },
@@ -396,7 +396,10 @@ function SponsorSlot({ group, slotIndex }) {
   }, [group.length, slotIndex])
 
   return (
-    <div className="sponsor-slot">
+    <div
+      className="sponsor-slot"
+      style={{ '--sponsor-transition': `${SPONSOR_TRANSITION_SECONDS}s` }}
+    >
       {group.map((sponsor, i) => (
         <SponsorLogo
           key={sponsor.name}
@@ -508,14 +511,15 @@ function Button({ children, href, secondary = false }) {
   )
 }
 
-function SectionIntro({ number, title, text, link }) {
+// heading="h1" para el título principal de una página interna
+function SectionIntro({ number, title, text, link, heading: Heading = 'h2' }) {
   return (
     <div className="section-intro">
       <span className="kicker">{number}</span>
       <div>
-        <h2>
+        <Heading>
           <RevealHeading>{title}</RevealHeading>
-        </h2>
+        </Heading>
         <p>{text}</p>
         {link && (
           <a className="arrow-link" href={link}>
@@ -635,8 +639,9 @@ function Footer() {
         <div>
           <UPBotLogo playIntro={false} />
           <p>
-            Convertir a UPbot en un equipo universitario reconocido por su
-            innovación, comunidad y desarrollo tecnológico.
+            Equipo de robótica de la Universidad Panamericana, Campus
+            Guadalajara. Diseñamos, construimos y programamos robots para
+            competir.
           </p>
         </div>
 
@@ -652,7 +657,9 @@ function Footer() {
           <small>PARTICIPA</small>
           <a href="/unete">Únete</a>
           <a href="/colabora">Colabora</a>
-          <a href="https://www.tiktok.com/@upbot_gdl">TikTok ↗</a>
+          <a href="https://www.tiktok.com/@upbot_gdl" target="_blank" rel="noreferrer">
+            TikTok ↗
+          </a>
           <a href="https://www.instagram.com/upbot_gdl/" target="_blank" rel="noreferrer">
             Instagram ↗
           </a>
@@ -817,7 +824,7 @@ function Home() {
             <span className="kicker">UPBOT / EQUIPO UNIVERSITARIO DE ROBÓTICA</span>
             <TypewriterHeading />
             <p>
-              UPbot es un equipo multidisciplinario de robótica donde
+              UPBot es un equipo multidisciplinario de robótica donde
               estudiantes convierten teoría en proyectos reales,
               competencias y crecimiento profesional.
             </p>
@@ -850,7 +857,7 @@ function Home() {
 
           <p className="pain-closing">
             Las mejores experiencias universitarias no solo se estudian: se
-            construyen y con UPbot puedes lograrlo.
+            construyen y con UPBot puedes lograrlo.
           </p>
         </section>
 
@@ -1068,6 +1075,7 @@ function ProjectsPage() {
 
       <main className="inner-page shell">
         <SectionIntro
+          heading="h1"
           number="01 / PROYECTOS"
           title="Proyectos en desarrollo."
           text="[PROJECTS PAGE INTRO PLACEHOLDER]"
@@ -1156,15 +1164,15 @@ const teamAreas = [
     sub: 'Difusión, Administración general y Talento Humano.',
   },
   {
-    title: 'UPbot Teams',
+    title: 'UPBot Teams',
     sub: 'Sumo, Mini Sumo, Sigue Línea y Rescue.',
   },
   {
-    title: 'UPbot Research',
+    title: 'UPBot Research',
     sub: 'Buenas ideas, investigación y futuros proyectos.',
   },
   {
-    title: 'UPbot Internship',
+    title: 'UPBot Internship',
     sub: 'Diseño, programación, electrónica o impartirlas.',
   },
 ]
@@ -1204,7 +1212,7 @@ function TeamAreas() {
   return (
     <section className="team-areas">
       <span className="kicker">[UPBOT AREAS]</span>
-      <h2><RevealHeading>Áreas de UPbot.</RevealHeading></h2>
+      <h2><RevealHeading>Áreas de UPBot.</RevealHeading></h2>
 
       <div className="team-areas-grid">
         {teamAreas.map((area) => (
@@ -1495,6 +1503,7 @@ function InfoPage({ content }) {
 
       <main className="inner-page info-page shell">
         <SectionIntro
+          heading="h1"
           number={content.eyebrow}
           title={content.title}
           text={content.intro}
@@ -1613,7 +1622,7 @@ function JoinPage({ collaboration = false }) {
   const title = collaboration
     ? '[COLLABORATION HEADLINE]'
     : '¿Quieres construir algo real?'
-  const eyebrow = collaboration ? '09 / COLABORA' : '08 / ÚNETE A UPBOT'
+  const eyebrow = collaboration ? '08 / COLABORA' : '07 / ÚNETE A UPBOT'
   const intro = collaboration
     ? '[COLLABORATION INTRO PLACEHOLDER]'
     : 'No guardes tu potencial, constrúyelo.'
@@ -1638,7 +1647,7 @@ function JoinPage({ collaboration = false }) {
         ],
         [
           'Áreas del equipo',
-          'UPbot cuenta con 4 equipos de robots específicos y uno de logística.',
+          'UPBot cuenta con 4 equipos de robots específicos y uno de logística.',
         ],
         [
           'Cómo trabajamos',
@@ -1650,7 +1659,7 @@ function JoinPage({ collaboration = false }) {
         ],
         [
           'Proceso de entrada',
-          'Aplica: Llena el formulario de ingreso y cuéntanos sobre tus intereses, habilidades y motivación para formar parte del equipo. Conócenos: Tendrás una entrevista con integrantes del equipo para resolver dudas y conocer mejor tu perfil. Internship: Aprenderás procesos, herramientas y dinámicas de trabajo dentro de las distintas áreas de UPbot. Intégrate: Comienza a colaborar en proyectos reales junto a estudiantes apasionados por la innovación y la tecnología. Construye: Participa en competencias, desarrolla experiencia práctica y forma parte del crecimiento del equipo.',
+          'Aplica: Llena el formulario de ingreso y cuéntanos sobre tus intereses, habilidades y motivación para formar parte del equipo. Conócenos: Tendrás una entrevista con integrantes del equipo para resolver dudas y conocer mejor tu perfil. Internship: Aprenderás procesos, herramientas y dinámicas de trabajo dentro de las distintas áreas de UPBot. Intégrate: Comienza a colaborar en proyectos reales junto a estudiantes apasionados por la innovación y la tecnología. Construye: Participa en competencias, desarrolla experiencia práctica y forma parte del crecimiento del equipo.',
         ],
       ]
 
@@ -1660,6 +1669,7 @@ function JoinPage({ collaboration = false }) {
 
       <main className="inner-page join-page shell">
         <SectionIntro
+          heading="h1"
           number={eyebrow}
           title={title}
           text={intro}
@@ -1698,7 +1708,7 @@ function JoinPage({ collaboration = false }) {
               En su mayoría el equipo está conformado por estudiantes de
               mecatrónica, sin embargo la robótica es una actividad
               multidisciplinaria en la que se requiere de diversas
-              habilidades. En UPbot creemos que la clave está en sumar, por
+              habilidades. En UPBot creemos que la clave está en sumar, por
               eso aquí todas las habilidades cuentan y todos los perfiles
               pueden aportar algo valioso.
             </p>
@@ -1719,7 +1729,7 @@ function JoinPage({ collaboration = false }) {
           <section className="investment-section">
             <h2><RevealHeading>Inversión: $0 MXN</RevealHeading></h2>
             <p>
-              UPbot no se paga con dinero.
+              UPBot no se paga con dinero.
               <br />
               Se construye con compromiso, tiempo, participación, pasión y
               colaboración.
@@ -1821,8 +1831,59 @@ function NotFound() {
   )
 }
 
-function PageRouter({ path }) {
-  if (path === '/' || path === '') return <Home />
+/* Título de la pestaña y descripción (Google) de cada página */
+const SITE_NAME = 'UPBot'
+const DEFAULT_DESCRIPTION =
+  'UPBot es el equipo de robótica de la Universidad Panamericana, Campus Guadalajara. Diseñamos, construimos y programamos robots para competir.'
+
+const pageMeta = {
+  '/': {
+    title: 'UPBot · Equipo de robótica UP Guadalajara',
+    description: DEFAULT_DESCRIPTION,
+  },
+  '/proyectos': {
+    title: `Proyectos · ${SITE_NAME}`,
+    description: 'Rescue, Sumo, Mini-Sumo y Sigue-Líneas: los robots que UPBot desarrolla para competir en TMR y RoboMatrix.',
+  },
+  '/equipo': {
+    title: `Equipo · ${SITE_NAME}`,
+    description: 'Conoce al equipo de UPBot: estudiantes de la UP Guadalajara que diseñan, construyen y programan robots.',
+  },
+  '/competencias': {
+    title: `Competencias · ${SITE_NAME}`,
+    description: 'Las competencias de robótica en las que participa UPBot: RoboMatrix, TMR, RoboRAVE y RoboSTEM.',
+  },
+  '/nosotros': {
+    title: `Nosotros · ${SITE_NAME}`,
+    description: 'La historia, el propósito y los valores de UPBot, el equipo de robótica de la UP Guadalajara.',
+  },
+  '/unete': {
+    title: `Únete · ${SITE_NAME}`,
+    description: 'Únete a UPBot: sin costo, abierto a todas las carreras. Aprende robótica construyendo proyectos reales y compitiendo.',
+  },
+  '/colabora': {
+    title: `Colabora · ${SITE_NAME}`,
+    description: 'Apoya a UPBot con patrocinio, componentes, materiales o manufactura y acompaña a estudiantes que construyen robots.',
+  },
+}
+
+function metaForPath(path) {
+  const clean = path.replace(/\/+$/, '') || '/'
+  if (pageMeta[clean]) return pageMeta[clean]
+  const project = projectData.find((item) => `/proyectos/${item.slug}` === clean)
+  if (project) {
+    return {
+      title: `${project.name} · Proyectos · ${SITE_NAME}`,
+      description: project.description,
+    }
+  }
+  return { title: `Página no encontrada · ${SITE_NAME}`, description: DEFAULT_DESCRIPTION }
+}
+
+function PageRouter({ path: rawPath }) {
+  // "/equipo/" y "/equipo" son la misma página
+  const path = rawPath.replace(/\/+$/, '') || '/'
+  if (path === '/') return <Home />
 
   if (path === '/proyectos') return <ProjectsPage />
 
@@ -1911,6 +1972,12 @@ function App() {
       document.removeEventListener('click', onClick)
     }
   }, [goTo])
+
+  useEffect(() => {
+    const { title, description } = metaForPath(path)
+    document.title = title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', description)
+  }, [path])
 
   return <PageRouter path={path} />
 }
