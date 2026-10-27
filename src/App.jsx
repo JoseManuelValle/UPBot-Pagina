@@ -139,8 +139,14 @@ const testimonials = [
    Mientras la lista esté vacía solo se ven las tarjetas de
    los perfiles. */
 const socialPosts = [
-  // 'https://www.instagram.com/p/XXXXXXXXXXX/',
-  // 'https://www.tiktok.com/@upbot_gdl/video/0000000000000000000',
+  'https://www.instagram.com/upbot_gdl/p/Dee8sq1ls52/',    // ¿Qué es UPBot y qué hacemos?
+  'https://www.instagram.com/upbot_gdl/reel/Dc4sh5gsXdM/', // ¿Pero qué es UPBOT?
+  'https://www.instagram.com/upbot_gdl/reel/DckNAyjub5g/', // "How's the baby doing?"
+  'https://www.instagram.com/upbot_gdl/reel/DccHkTEvwzF/', // Trabajo en equipo (soldando)
+  // Más opciones (se ven mejor de 4 en 4):
+  // 'https://www.instagram.com/upbot_gdl/reel/DdcKjuVhntn/', // POV: eres mecatrónico
+  // 'https://www.instagram.com/upbot_gdl/reel/DRWHYzcDPYV/', // RoboSTEM 2025
+  // De TikTok: 'https://www.tiktok.com/@upbot_gdl/video/0000000000000000000',
 ]
 
 const socialProfiles = [
@@ -713,7 +719,7 @@ function SocialIcon({ network }) {
 
 // Convierte el link de una publicación en la dirección de su embed
 function socialEmbed(url) {
-  const insta = url.match(/instagram\.com\/(?:p|reel)\/([\w-]+)/)
+  const insta = url.match(/instagram\.com\/(?:[\w.]+\/)?(?:p|reel)\/([\w-]+)/)
   if (insta) return { network: 'Instagram', src: `https://www.instagram.com/p/${insta[1]}/embed` }
   const tiktok = url.match(/tiktok\.com\/.*\/video\/(\d+)/)
   if (tiktok) return { network: 'TikTok', src: `https://www.tiktok.com/embed/v2/${tiktok[1]}` }
@@ -722,6 +728,29 @@ function socialEmbed(url) {
 
 function SocialSection() {
   const embeds = socialPosts.map(socialEmbed).filter(Boolean)
+  const postsRef = useRef(null)
+
+  // El embed de Instagram avisa su altura real (mensaje MEASURE):
+  // se la aplicamos a su iframe para que no quede cortado ni con scroll.
+  useEffect(() => {
+    const onMessage = (event) => {
+      if (event.origin !== 'https://www.instagram.com') return
+      let data
+      try {
+        data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data
+      } catch {
+        return
+      }
+      const height = data?.type === 'MEASURE' && data.details?.height
+      if (!height || !postsRef.current) return
+      const frame = [...postsRef.current.querySelectorAll('iframe')].find(
+        (item) => item.contentWindow === event.source
+      )
+      if (frame) frame.style.height = `${Math.ceil(height)}px`
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
 
   return (
     <section className="social-section shell">
@@ -754,13 +783,14 @@ function SocialSection() {
       </div>
 
       {embeds.length > 0 && (
-        <div className="social-posts">
+        <div className="social-posts" ref={postsRef}>
           {embeds.map((embed) => (
             <iframe
               className={`social-post social-post--${embed.network.toLowerCase()}`}
               src={embed.src}
               title={`Publicación de UPBot en ${embed.network}`}
               loading="lazy"
+              scrolling="no"
               allowFullScreen
               key={embed.src}
             />
