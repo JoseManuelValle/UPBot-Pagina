@@ -96,44 +96,65 @@ const sponsorPool = [
 const painPoints = [
   {
     title: 'Todo se queda en teoría',
-    text: 'Aprendes conceptos en clase pero pocas veces construyes proyectos reales.',
+    text: 'Aprendes conceptos en clase, pero terminas la carrera con pocos proyectos reales que mostrar.',
   },
   {
-    title: 'No sabes cómo diferenciarte',
-    text: 'Muchos estudiantes terminan la carrera sin experiencia práctica ni proyectos reales.',
+    title: 'Sin herramientas profesionales',
+    text: 'Software, componentes y equipo suelen ser caros o difíciles de conseguir por tu cuenta.',
   },
   {
-    title: 'No tienes acceso a herramientas profesionales',
-    text: 'Software, componentes y tecnología suelen ser costosos o inaccesibles.',
-  },
-  {
-    title: 'Te falta comunidad',
-    text: 'A veces aprender solo hace que la ingeniería se sienta fría y lejana.',
-  },
-  {
-    title: 'No sabes cómo empezar',
-    text: 'La robótica puede parecer difícil cuando nadie te enseña el proceso.',
+    title: 'Sin comunidad ni guía',
+    text: 'Empezar solo en robótica es difícil cuando nadie te enseña el proceso.',
   },
 ]
 
+// role: carrera / proyecto de cada quien (ajústalo con sus datos reales)
 const testimonials = [
   {
     quote: 'Por primera vez sentí que lo que aprendía sí tenía una aplicación real',
-    text: 'Dentro de UPbot empecé a trabajar en proyectos reales y ganar experiencia fuera del salón. Me ayudó muchísimo a crecer profesionalmente.',
+    text: 'Dentro de UPBot empecé a trabajar en proyectos reales y ganar experiencia fuera del salón. Me ayudó muchísimo a crecer profesionalmente.',
     name: 'Carlo Gordillo',
-    photo: '/images/Carlo.png',
+    role: 'Integrante de UPBot',
+    photo: '/images/testimonios/carlo.webp',
   },
   {
     quote: 'Entré por curiosidad y terminé encontrando una comunidad',
     text: 'Además de aprender ingeniería, conocí personas con las mismas ganas de construir y crecer. Eso hizo toda la diferencia.',
     name: 'Natalia Pérez',
-    photo: '/images/Natalia.png',
+    role: 'Integrante de UPBot',
+    photo: '/images/testimonios/natalia.webp',
   },
   {
-    quote: 'UPbot cambió la forma en la que veo mi futuro profesional',
+    quote: 'UPBot cambió la forma en la que veo mi futuro profesional',
     text: 'Las competencias, proyectos y trabajo en equipo me ayudaron a desarrollar habilidades que normalmente no aprendes en clase.',
-    name: 'Josemanuel Valle, Líder UPbot',
-    photo: '/images/Josemanuel.png',
+    name: 'Josemanuel Valle',
+    role: 'Líder de UPBot',
+    photo: '/images/testimonios/josemanuel.webp',
+  },
+]
+
+/* ---------- REDES SOCIALES ----------
+   Para mostrar publicaciones en el Home, pega aquí sus links
+   (de Instagram: /p/... o /reel/...; de TikTok: /video/...).
+   Mientras la lista esté vacía solo se ven las tarjetas de
+   los perfiles. */
+const socialPosts = [
+  // 'https://www.instagram.com/p/XXXXXXXXXXX/',
+  // 'https://www.tiktok.com/@upbot_gdl/video/0000000000000000000',
+]
+
+const socialProfiles = [
+  {
+    network: 'Instagram',
+    handle: '@upbot_gdl',
+    url: 'https://www.instagram.com/upbot_gdl/',
+    text: 'Fotos de los robots, del taller y de cada competencia.',
+  },
+  {
+    network: 'TikTok',
+    handle: '@upbot_gdl',
+    url: 'https://www.tiktok.com/@upbot_gdl',
+    text: 'Videos cortos de pruebas, armado y detrás de cámaras.',
   },
 ]
 
@@ -673,6 +694,83 @@ function ProcessGallery({ images, speed = 1 }) {
   )
 }
 
+function SocialIcon({ network }) {
+  if (network === 'TikTok') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M16 3c.4 2.6 2.1 4.2 4.6 4.4v3.2c-1.7 0-3.2-.5-4.6-1.4v6.6a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v3.3a2.4 2.4 0 1 0 1.5 2.2V3h3.2z" fill="currentColor" />
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+// Convierte el link de una publicación en la dirección de su embed
+function socialEmbed(url) {
+  const insta = url.match(/instagram\.com\/(?:p|reel)\/([\w-]+)/)
+  if (insta) return { network: 'Instagram', src: `https://www.instagram.com/p/${insta[1]}/embed` }
+  const tiktok = url.match(/tiktok\.com\/.*\/video\/(\d+)/)
+  if (tiktok) return { network: 'TikTok', src: `https://www.tiktok.com/embed/v2/${tiktok[1]}` }
+  return null
+}
+
+function SocialSection() {
+  const embeds = socialPosts.map(socialEmbed).filter(Boolean)
+
+  return (
+    <section className="social-section shell">
+      <SectionIntro
+        number="06 / SÍGUENOS"
+        title="Lo que pasa en el taller."
+        text="Pruebas, armado, competencias y todo lo que no cabe en una página. Síguenos para verlo primero."
+      />
+
+      <div className="social-profiles">
+        {socialProfiles.map((profile) => (
+          <a
+            className="social-profile"
+            href={profile.url}
+            target="_blank"
+            rel="noreferrer"
+            key={profile.network}
+          >
+            <span className="social-profile-icon">
+              <SocialIcon network={profile.network} />
+            </span>
+            <span className="social-profile-copy">
+              <small>{profile.network}</small>
+              <strong>{profile.handle}</strong>
+              <span>{profile.text}</span>
+            </span>
+            <b>Seguir ↗</b>
+          </a>
+        ))}
+      </div>
+
+      {embeds.length > 0 && (
+        <div className="social-posts">
+          {embeds.map((embed) => (
+            <iframe
+              className={`social-post social-post--${embed.network.toLowerCase()}`}
+              src={embed.src}
+              title={`Publicación de UPBot en ${embed.network}`}
+              loading="lazy"
+              allowFullScreen
+              key={embed.src}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
+
 /* =========================================================
    PÁGINA: HOME
    ========================================================= */
@@ -877,17 +975,23 @@ function Home() {
           <div className="testimonials-grid">
             {testimonials.map((item) => (
               <article className="testimonial-card" key={item.name}>
-                <span className="testimonial-mark" aria-hidden="true">"</span>
+                <div className="testimonial-photo">
+                  <Avatar src={item.photo} name={item.name} />
+                  <span className="testimonial-mark" aria-hidden="true">“</span>
+                </div>
                 <h3>{item.quote}</h3>
                 <p>{item.text}</p>
                 <div className="testimonial-author">
-                  <Avatar src={item.photo} name={item.name}/>
                   <b>{item.name}</b>
+                  <small>{item.role}</small>
                 </div>
               </article>
             ))}
           </div>
         </section>
+
+        {/* ---------- REDES ---------- */}
+        <SocialSection />
 
         {/* ---------- ÚNETE ---------- */}
         <section className="join-cta">
@@ -897,7 +1001,7 @@ function Home() {
               label="Únete a UPBot"
             />
             <div>
-              <span className="kicker">06 / ÚNETE A UPBOT</span>
+              <span className="kicker">07 / ÚNETE A UPBOT</span>
               <h2 className="dark-h2">
                 <RevealHeading>¿Quieres construir algo real?</RevealHeading>
               </h2>
@@ -910,7 +1014,7 @@ function Home() {
         {/* ---------- COLABORA ---------- */}
         <section className="collab-preview shell">
           <SectionIntro
-            number="07 / COLABORA"
+            number="08 / COLABORA"
             title="Ayúdanos a llegar más lejos."
             text="Empresas y organizaciones pueden apoyar a UPBot con patrocinio, componentes, materiales o manufactura. Tu apoyo se convierte directamente en robots, viajes a competencias y estudiantes mejor preparados."
             link="/colabora"

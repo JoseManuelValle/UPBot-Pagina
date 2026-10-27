@@ -817,7 +817,7 @@ h3,
 
 .pain-heading {
   max-width: 640px;
-  margin: 0 auto 40px;
+  margin: 0 auto 32px;
   font: 400 clamp(24px, 3.2vw, 34px)/1.3 "Space Grotesk", serif;
   letter-spacing: -0.5px;
 }
@@ -861,7 +861,7 @@ h3,
 
 .pain-closing {
   max-width: 620px;
-  margin: 56px auto 0;
+  margin: 40px auto 0;
   color: var(--blue);
   font: 700 20px/1.45 "Space Grotesk", sans-serif;
 }
@@ -894,25 +894,42 @@ h3,
 
 .testimonial-card {
   position: relative;
-  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
   background: var(--surface);
   border: 1px solid var(--line);
 }
 
+.testimonial-photo {
+  position: relative;
+  width: 112px;
+  margin-bottom: 22px;
+}
+
 .testimonial-mark {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--blue);
-  font: 700 40px/1 "Space Grotesk", serif;
+  position: absolute;
+  right: -10px;
+  bottom: -6px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--ink);
+  font: 700 30px/1 "Space Grotesk", serif;
+  padding-top: 10px;
 }
 
 .testimonial-card h3 {
   margin: 0 0 12px;
-  font: 700 16px/1.35 "Space Grotesk", sans-serif;
+  font: 500 20px/1.3 "Space Grotesk", sans-serif;
+  letter-spacing: -0.3px;
 }
 
 .testimonial-card p {
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
@@ -920,31 +937,45 @@ h3,
 
 .testimonial-author {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.testimonial-author b {
+  font-size: 14px;
+}
+
+.testimonial-author small {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .avatar-circle {
   display: flex;
-  flex: 0 0 auto;
-  width: 36px;
-  height: 36px;
+  width: 112px;
+  height: 112px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border-radius: 50%;
   background: var(--paper);
-  border: 1px solid var(--line);
+  box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--yellow);
 }
 
 .avatar-circle img {
-  width: auto;
-  height: 210%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
 .avatar-fallback {
-  font: 800 13px/1 "Space Grotesk", sans-serif;
+  font: 800 36px/1 "Space Grotesk", sans-serif;
   color: var(--blue);
 }
 
@@ -3042,5 +3073,243 @@ h2.dark-h2 {
   .hero-robot .robot-trace,
   .hero-robot .robot-shadow {
     animation: none;
+  }
+}
+
+
+/* =========================================================
+   25 · TOQUES TECH (sutiles)
+   ------------------------------------------------------------
+   Etiquetas en letra tipo código con un "LED" amarillo, líneas
+   de circuito con un pulso que las recorre, y un brillo leve
+   al pasar el mouse por las tarjetas.
+   ========================================================= */
+
+.kicker,
+.sponsors-kicker,
+.tile-info > span,
+.process-step span,
+.proof-grid span,
+.testimonial-author small,
+.social-profile-copy small {
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  letter-spacing: 0.6px;
+}
+
+.kicker::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 9px 1px 0;
+  border-radius: 1px;
+  background: var(--yellow);
+  box-shadow: 0 0 8px rgba(255, 207, 9, 0.8);
+  vertical-align: middle;
+}
+
+/* Línea de circuito con nodos y un pulso amarillo */
+.sponsors-strip {
+  position: relative;
+  border-bottom: 0;
+}
+
+.sponsors-strip::after,
+.social-section::before {
+  content: "";
+  display: block;
+  height: 9px;
+  background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='9'%3E%3Cpath d='M0 4.5H90l6-3h54l6 3H240' fill='none' stroke='%23d7d9d5'/%3E%3Ccircle cx='60' cy='4.5' r='2.5' fill='%23d7d9d5'/%3E%3Ccircle cx='200' cy='4.5' r='2.5' fill='%23d7d9d5'/%3E%3C/svg%3E") left center / 240px 9px repeat-x;
+}
+
+.sponsors-strip {
+  overflow: hidden;
+}
+
+.sponsors-strip::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.sponsors-strip::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 3px;
+  width: 90px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+  animation: circuit-pulse 7s linear infinite;
+}
+
+@keyframes circuit-pulse {
+  from { transform: translateX(-100px); }
+  to { transform: translateX(100vw); }
+}
+
+/* Brillo leve al pasar el mouse */
+.project-table .project-tile,
+.testimonial-card,
+.social-profile {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.project-table .project-tile:hover,
+.testimonial-card:hover,
+.social-profile:hover {
+  border-color: rgba(255, 207, 9, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(255, 207, 9, 0.55),
+    0 14px 34px rgba(41, 56, 95, 0.12);
+  transform: translateY(-2px);
+}
+
+.process-step h3 {
+  transition: color 0.25s ease;
+}
+
+.process-step:hover h3 {
+  color: var(--yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsors-strip::before {
+    display: none;
+  }
+
+  .project-table .project-tile:hover,
+  .testimonial-card:hover,
+  .social-profile:hover {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   26 · REDES SOCIALES (SocialSection)
+   ------------------------------------------------------------
+   Tarjetas de los perfiles siempre visibles; debajo, las
+   publicaciones de la lista socialPosts (App.jsx) si hay.
+   ========================================================= */
+
+.social-section {
+  padding: 0 0 96px;
+}
+
+.social-section::before {
+  margin-bottom: 96px;
+}
+
+.social-profiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.social-profile {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 24px 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.social-profile-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--blue-dark);
+  color: var(--yellow);
+}
+
+.social-profile-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.social-profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.social-profile-copy small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.social-profile-copy strong {
+  font: 500 22px/1.1 "Space Grotesk", sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.social-profile-copy span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.social-profile b {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.social-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.social-post {
+  width: 100%;
+  height: 580px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+@media (max-width: 760px) {
+  .social-profiles {
+    grid-template-columns: 1fr;
+  }
+
+  .social-section::before {
+    margin-bottom: 64px;
+  }
+}
+
+@media (max-width: 420px) {
+  .social-profile {
+    grid-template-columns: 48px minmax(0, 1fr);
+    padding: 20px;
+  }
+
+  .social-profile-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .social-profile b {
+    grid-column: 2;
   }
 }
